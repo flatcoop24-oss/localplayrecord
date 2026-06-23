@@ -1,0 +1,5 @@
+Automatic deployment check
+
+Triggered by a commit to main.
+Timestamp: 2026-06-23 18:05 KST
+Expected site URL: https://flatcoop24-oss.github.io/localplayrecord/deploy-check.txt
