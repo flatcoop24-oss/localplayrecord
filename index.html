@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="로컬플레이레코드 신청곡과 뮤지션 응원하기 페이지" />
+  <meta property="og:title" content="LOCAL PLAY RECORD" />
+  <meta property="og:description" content="오늘 듣고 싶은 음악을 신청하고 뮤지션에게 응원을 남겨주세요." />
+  <meta property="og:type" content="website" />
+  <title>LOCAL PLAY RECORD | 신청곡과 뮤지션 응원하기</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script src="config.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 바로가기</a>
+
+  <header class="site-header" data-header>
+    <div class="container nav-shell">
+      <a class="brand" href="#home" aria-label="로컬플레이레코드 홈">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-copy">
+          <strong data-brand-name>LOCAL PLAY RECORD</strong>
+          <small>REQUEST · SUPPORT</small>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        메뉴
+      </button>
+      <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="주요 메뉴">
+        <a href="#request">신청곡</a>
+        <a href="#support">응원하기</a>
+        <a href="#live">오늘의 라이브</a>
+        <a href="#playlist">플레이리스트</a>
+        <a href="#archive">기록</a>
+        <a href="#admin">관리자</a>
+      </nav>
+      <a class="header-cta" href="#request">오늘 신청하기</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="home" class="hero section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Local Music Request Platform</p>
+          <h1>로플레의 오늘을<br />음악으로 채우는 곳.</h1>
+          <p class="hero-text">QR로 신청곡을 남기고, 현장의 뮤지션에게 응원을 보냅니다. 관객의 취향과 메시지는 오늘의 라이브 기록으로 남습니다.</p>
+          <div class="cta-row">
+            <a class="button primary" href="#request">신청곡 남기기</a>
+            <a class="button secondary" href="#support">뮤지션 응원하기</a>
+          </div>
+          <div class="hero-metrics" aria-label="홈페이지 주요 기능">
+            <article><strong>01</strong><span>신청곡 접수</span></article>
+            <article><strong>02</strong><span>뮤지션 응원</span></article>
+            <article><strong>03</strong><span>공연 기록</span></article>
+          </div>
+          <p class="notice">좌석/테이블 번호는 받지 않습니다. 모든 신청곡은 현장 분위기와 공연 흐름에 맞춰 확인됩니다.</p>
+        </div>
+
+        <div class="hero-interface" aria-label="음악 플랫폼형 화면 미리보기">
+          <div class="interface-window">
+            <div class="window-topbar">
+              <span></span><span></span><span></span>
+              <p>localplayrecord.kr/live</p>
+            </div>
+            <div class="interface-banner">
+              <div>
+                <span class="card-label mint">TODAY LIVE</span>
+                <h2 data-event-title>오늘의 로플레 라이브</h2>
+                <p data-event-description>오늘 이 공간에서 듣고 싶은 음악과 무대에 대한 응원을 남겨주세요.</p>
+              </div>
+              <div class="disc" aria-hidden="true"></div>
+            </div>
+            <div class="search-shell" aria-hidden="true">
+              <span>듣고 싶은 곡을 검색하듯 남겨보세요</span>
+              <b>REQUEST</b>
+            </div>
+            <div class="track-list compact" aria-hidden="true">
+              <article class="track-row active">
+                <span class="rank">01</span>
+                <button type="button" tabindex="-1">▶</button>
+                <div class="track-main">
+                  <strong>오늘의 신청곡</strong>
+                  <small>Audience Pick · Live Mood</small>
+                </div>
+                <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <span class="duration">03:12</span>
+              </article>
+              <article class="track-row">
+                <span class="rank">02</span>
+                <button type="button" tabindex="-1">▶</button>
+                <div class="track-main">
+                  <strong>응원 메시지</strong>
+                  <small>Musician Support</small>
+                </div>
+                <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <span class="duration">LIVE</span>
+              </article>
+              <article class="track-row">
+                <span class="rank">03</span>
+                <button type="button" tabindex="-1">▶</button>
+                <div class="track-main">
+                  <strong>공연 아카이브</strong>
+                  <small>Local Record</small>
+                </div>
+                <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <span class="duration">SAVE</span>
+              </article>
+            </div>
+          </div>
+          <div class="floating-card floating-status">
+            <span>신청곡</span>
+            <strong data-event-status>신청곡 접수중</strong>
+          </div>
+          <div class="floating-card floating-count">
+            <span>LOCAL DATA</span>
+            <strong><b data-request-count>0</b>곡 · <b data-support-count>0</b>응원</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="서비스 키워드">
+      <div class="ticker-track">
+        <span>REQUEST</span><span>SUPPORT</span><span>LIVE</span><span>ARCHIVE</span><span>LOCAL ARTIST</span><span>PLAYLIST</span>
+        <span>REQUEST</span><span>SUPPORT</span><span>LIVE</span><span>ARCHIVE</span><span>LOCAL ARTIST</span><span>PLAYLIST</span>
+      </div>
+    </section>
+
+    <section id="request" class="section request-section">
+      <div class="container section-heading split-heading">
+        <div>
+          <p class="eyebrow">Song Request</p>
+          <h2>오늘 듣고 싶은 노래를<br />신청해 주세요.</h2>
+        </div>
+        <p>곡명과 아티스트만으로도 접수됩니다. 사연은 공개 동의한 경우에만 로플레 기록/SNS 콘텐츠로 활용합니다.</p>
+      </div>
+
+      <div class="container request-layout">
+        <form class="form-card request-card" data-form="request" novalidate>
+          <div class="form-card-head">
+            <span class="card-label">REQUEST FORM</span>
+            <h3>신청곡 접수</h3>
+          </div>
+
+          <div class="form-row">
+            <label for="requestNickname">닉네임 <span aria-hidden="true">*</span></label>
+            <input id="requestNickname" name="nickname" type="text" maxlength="20" required placeholder="예: 로플레친구" autocomplete="nickname" />
+            <p class="field-error" data-error-for="requestNickname"></p>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label for="songTitle">신청곡 제목 <span aria-hidden="true">*</span></label>
+              <input id="songTitle" name="songTitle" type="text" maxlength="80" required placeholder="예: 밤편지" />
+              <p class="field-error" data-error-for="songTitle"></p>
+            </div>
+
+            <div class="form-row">
+              <label for="artistName">아티스트명 <span aria-hidden="true">*</span></label>
+              <input id="artistName" name="artistName" type="text" maxlength="80" required placeholder="예: 아이유" />
+              <p class="field-error" data-error-for="artistName"></p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="mood">오늘의 분위기</label>
+            <select id="mood" name="mood" data-mood-options>
+              <option value="">선택하지 않음</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="reason">신청 이유</label>
+            <textarea id="reason" name="reason" rows="4" maxlength="300" placeholder="이 노래를 듣고 싶은 이유를 가볍게 남겨주세요."></textarea>
+            <p class="counter"><span data-counter-for="reason">0</span>/300</p>
+          </div>
+
+          <label class="checkbox-row">
+            <input name="isPublic" type="checkbox" value="yes" />
+            <span>신청곡과 사연을 로플레 기록/SNS에 익명 공개해도 괜찮아요.</span>
+          </label>
+
+          <input class="visually-hidden" name="website" tabindex="-1" autocomplete="off" />
+
+          <button class="button primary full" type="submit">신청곡 접수하기</button>
+          <p class="form-status" role="status" aria-live="polite" data-status></p>
+        </form>
+
+        <aside class="hot-panel" aria-label="신청곡 운영 안내">
+          <div class="hot-panel-head">
+            <div>
+              <p class="eyebrow">Hot Request Flow</p>
+              <h3>접수된 곡은 이렇게 확인돼요.</h3>
+            </div>
+            <span class="pill">NO TABLE NO.</span>
+          </div>
+          <div class="track-list">
+            <article class="track-row active">
+              <span class="rank">01</span>
+              <button type="button" tabindex="-1" aria-hidden="true">▶</button>
+              <div class="track-main">
+                <strong>곡명 · 아티스트 확인</strong>
+                <small>필수 정보만 빠르게 접수</small>
+              </div>
+              <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </article>
+            <article class="track-row">
+              <span class="rank">02</span>
+              <button type="button" tabindex="-1" aria-hidden="true">▶</button>
+              <div class="track-main">
+                <strong>분위기와 공연 흐름 검토</strong>
+                <small>모든 신청곡이 재생되는 것은 아니에요</small>
+              </div>
+              <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </article>
+            <article class="track-row">
+              <span class="rank">03</span>
+              <button type="button" tabindex="-1" aria-hidden="true">▶</button>
+              <div class="track-main">
+                <strong>공개 동의 기록 저장</strong>
+                <small>좋은 사연은 공연 후 아카이브로</small>
+              </div>
+              <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </article>
+          </div>
+          <div class="guide-card">
+            <strong>운영 메모</strong>
+            <p>욕설, 광고, 타인의 개인정보가 포함된 신청은 공개하지 않습니다.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="support" class="section support-section">
+      <div class="container section-heading split-heading dark-heading">
+        <div>
+          <p class="eyebrow">Musician Support</p>
+          <h2>무대 위 뮤지션에게<br />응원을 보내주세요.</h2>
+        </div>
+        <p>글을 길게 쓰지 않아도 괜찮습니다. 짧은 박수, 하트, 한마디가 다음 무대를 만드는 힘이 됩니다.</p>
+      </div>
+
+      <div class="container support-layout">
+        <div class="musician-side">
+          <div class="musician-grid" data-musician-cards aria-live="polite"></div>
+        </div>
+
+        <form class="form-card dark support-card" data-form="support" novalidate>
+          <div class="form-card-head">
+            <span class="card-label mint">SUPPORT FORM</span>
+            <h3>응원 메시지</h3>
+          </div>
+
+          <div class="form-row">
+            <label for="musicianId">응원할 뮤지션 <span aria-hidden="true">*</span></label>
+            <select id="musicianId" name="musicianId" required data-musician-options>
+              <option value="">뮤지션 선택</option>
+            </select>
+            <p class="field-error" data-error-for="musicianId"></p>
+          </div>
+
+          <div class="form-row">
+            <label for="supportNickname">닉네임 <span aria-hidden="true">*</span></label>
+            <input id="supportNickname" name="nickname" type="text" maxlength="20" required placeholder="예: 오늘의관객" autocomplete="nickname" />
+            <p class="field-error" data-error-for="supportNickname"></p>
+          </div>
+
+          <div class="form-row">
+            <span class="label-like">응원 이모지</span>
+            <div class="emoji-row" data-emoji-options></div>
+          </div>
+
+          <div class="form-row">
+            <label for="supportMessage">응원 메시지 <span aria-hidden="true">*</span></label>
+            <div class="preset-row" data-preset-row>
+              <button type="button" data-preset="오늘 무대 최고였어요.">오늘 무대 최고였어요</button>
+              <button type="button" data-preset="다음 공연도 보고 싶어요.">다음 공연도 보고 싶어요</button>
+              <button type="button" data-preset="로플레에서 또 만나요.">로플레에서 또 만나요</button>
+            </div>
+            <textarea id="supportMessage" name="message" rows="4" maxlength="300" required placeholder="뮤지션에게 전하고 싶은 말을 남겨주세요."></textarea>
+            <p class="counter"><span data-counter-for="supportMessage">0</span>/300</p>
+            <p class="field-error" data-error-for="supportMessage"></p>
+          </div>
+
+          <div class="form-row">
+            <label for="snsId">SNS 아이디</label>
+            <input id="snsId" name="snsId" type="text" maxlength="60" placeholder="선택 입력" />
+          </div>
+
+          <label class="checkbox-row">
+            <input name="isPublic" type="checkbox" value="yes" checked />
+            <span>응원 메시지를 로플레 기록/SNS에 익명 공개해도 괜찮아요.</span>
+          </label>
+
+          <input class="visually-hidden" name="website" tabindex="-1" autocomplete="off" />
+
+          <button class="button primary full" type="submit">응원 보내기</button>
+          <p class="form-status" role="status" aria-live="polite" data-status></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="live" class="section live-section">
+      <div class="container live-board">
+        <article class="live-summary">
+          <span class="card-label mint">NOW</span>
+          <h2>오늘의 라이브</h2>
+          <h3 data-live-title>오늘의 로플레 라이브</h3>
+          <p data-live-description>오늘 이 공간에서 듣고 싶은 음악과 무대에 대한 응원을 남겨주세요.</p>
+          <dl>
+            <div><dt>일정</dt><dd data-event-date>오늘</dd></div>
+            <div><dt>시작</dt><dd data-event-time>19:30</dd></div>
+            <div><dt>신청곡</dt><dd data-request-open>접수중</dd></div>
+            <div><dt>응원 메시지</dt><dd data-support-open>접수중</dd></div>
+          </dl>
+        </article>
+        <div class="lineup-wrap">
+          <div class="section-heading left-heading">
+            <p class="eyebrow">Line-up</p>
+            <h2>오늘 만나는 뮤지션</h2>
+          </div>
+          <div class="lineup" data-lineup></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="playlist" class="section playlist-section">
+      <div class="container section-heading">
+        <p class="eyebrow">BGM Playlist Mood</p>
+        <h2>오늘의 분위기를 고르면<br />선곡 방향이 더 선명해져요.</h2>
+        <p>신청곡 폼의 분위기 선택지는 공연 중 빠른 판단을 돕는 운영 태그입니다.</p>
+      </div>
+      <div class="container playlist-grid" aria-label="분위기 선택 예시">
+        <article><span>Calm</span><strong>잔잔하게</strong><p>대화가 흐르는 저녁, 부드러운 온도</p></article>
+        <article><span>Energy</span><strong>신나게</strong><p>박수와 리듬이 자연스럽게 올라오는 순간</p></article>
+        <article><span>Comfort</span><strong>위로받고 싶어요</strong><p>오늘 하루를 천천히 내려놓는 노래</p></article>
+        <article><span>Sing Along</span><strong>같이 부르고 싶어요</strong><p>관객과 무대가 함께 기억하는 후렴</p></article>
+      </div>
+    </section>
+
+    <section id="archive" class="section archive-section">
+      <div class="container section-heading split-heading">
+        <div>
+          <p class="eyebrow">Archive</p>
+          <h2>신청곡과 응원이<br />로플레 기록이 됩니다.</h2>
+        </div>
+        <p>공개 동의된 신청곡과 응원 메시지를 모아 공연 후 콘텐츠, 뮤지션 피드백, 다음 공연 기획 자료로 활용합니다.</p>
+      </div>
+      <div class="container archive-grid" data-archive-grid></div>
+      <div class="container stats-grid" data-stats-grid>
+        <article>
+          <strong data-request-count>0</strong>
+          <span>이 브라우저에 저장된 신청곡</span>
+        </article>
+        <article>
+          <strong data-support-count>0</strong>
+          <span>이 브라우저에 저장된 응원</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="admin" class="section admin-section">
+      <div class="container admin-layout">
+        <div class="section-copy">
+          <p class="eyebrow">Manager</p>
+          <h2>운영자 확인 화면</h2>
+          <p>GitHub Pages 정적 사이트용 간이 관리자입니다. 같은 브라우저에서 접수된 로컬 데이터 확인과 CSV 내보내기를 지원합니다.</p>
+          <p class="notice strong">실제 매장 운영 데이터는 Google Apps Script로 연결한 Google Sheet에서 관리하는 것을 권장합니다.</p>
+        </div>
+
+        <div class="admin-card" data-admin-card>
+          <form class="admin-login" data-admin-login>
+            <label for="adminPassword">관리자 비밀번호</label>
+            <div class="inline-control">
+              <input id="adminPassword" type="password" autocomplete="current-password" placeholder="config.js의 adminPassword" />
+              <button class="button secondary" type="submit">열기</button>
+            </div>
+            <p class="form-status" role="status" aria-live="polite" data-admin-status></p>
+          </form>
+
+          <div class="admin-panel" data-admin-panel hidden>
+            <div class="admin-actions">
+              <button class="button secondary" type="button" data-export="requests">신청곡 CSV</button>
+              <button class="button secondary" type="button" data-export="supports">응원 CSV</button>
+              <button class="button danger" type="button" data-clear-local>로컬 데이터 초기화</button>
+            </div>
+            <div class="admin-tabs" role="tablist" aria-label="관리자 데이터 탭">
+              <button class="active" type="button" data-admin-tab="requests">신청곡</button>
+              <button type="button" data-admin-tab="supports">응원</button>
+            </div>
+            <div class="admin-table-wrap">
+              <table data-admin-table>
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong data-footer-brand>LOCAL PLAY RECORD</strong>
+        <p data-contact-text>공연/대관/협업 문의는 인스타그램 DM으로 연락해주세요.</p>
+      </div>
+      <a class="button ghost" href="https://www.instagram.com/" target="_blank" rel="noreferrer" data-instagram-link>Instagram</a>
+    </div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
+  <script src="assets/app.js"></script>
+</body>
+</html>
