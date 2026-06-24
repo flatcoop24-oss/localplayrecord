@@ -22,10 +22,11 @@
     emojis: ['👏', '🖤', '🔥', '🎧', '🌙', '✨'],
     musicians: [],
     archiveSamples: [],
-    submitCooldownMs: 3000
+    submitCooldownMs: 3000,
+    remoteConfigTimeoutMs: 6000
   };
 
-  const config = mergeDeep(defaults, window.LPR_CONFIG || {});
+  let config = mergeDeep(defaults, window.LPR_CONFIG || {});
   const state = {
     activeAdminTab: 'requests'
   };
@@ -33,7 +34,8 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadSheetConfig();
     hydrateConfigText();
     renderOptions();
     renderMusicians();
@@ -60,6 +62,61 @@
 
   function isPlainObject(value) {
     return Object.prototype.toString.call(value) === '[object Object]';
+  }
+
+  async function loadSheetConfig() {
+    if (!config.sheetEndpoint) return;
+
+    try {
+      const response = await loadJsonp(config.sheetEndpoint, {
+        action: 'config',
+        cache: String(Date.now())
+      });
+
+      if (response && response.ok && response.config) {
+        config = mergeDeep(config, response.config);
+      } else if (response && response.error) {
+        console.warn('Google Sheet 설정을 불러오지 못했습니다:', response.error);
+      }
+    } catch (error) {
+      console.warn('Google Sheet 설정을 불러오지 못했습니다. config.js 값을 사용합니다.', error);
+    }
+  }
+
+  function loadJsonp(endpoint, params = {}) {
+    return new Promise((resolve, reject) => {
+      const callbackName = `lprSheetConfig_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const url = new URL(endpoint);
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.set(key, value);
+      });
+      url.searchParams.set('callback', callbackName);
+
+      const script = document.createElement('script');
+      const timer = window.setTimeout(() => {
+        cleanup();
+        reject(new Error('Google Sheet 설정 응답 시간이 초과되었습니다.'));
+      }, config.remoteConfigTimeoutMs);
+
+      function cleanup() {
+        window.clearTimeout(timer);
+        delete window[callbackName];
+        script.remove();
+      }
+
+      window[callbackName] = (data) => {
+        cleanup();
+        resolve(data);
+      };
+
+      script.onerror = () => {
+        cleanup();
+        reject(new Error('Google Sheet 설정 스크립트를 불러오지 못했습니다.'));
+      };
+
+      script.src = url.toString();
+      document.head.appendChild(script);
+    });
   }
 
   function hydrateConfigText() {
@@ -285,7 +342,17 @@
           return;
         }
 
-        const cooldownKey = `lpr:last-submit:${type}`;
+        if (type === 'request' && !config.currentEvent.requestOpen) {
+          if (status) status.textContent = '지금은 신청곡 접수가 마감되었습니다.';
+          return;
+        }
+
+        if (type === 'support' && !config.currentEvent.supportOpen) {
+          if (status) status.textContent = '지금은 응원 메시지 접수가 마감되었습니다.';
+          return;
+        }
+
+        cooldownKey = `lpr:last-submit:${type}`;
         const lastSubmit = Number(localStorage.getItem(cooldownKey) || 0);
         if (Date.now() - lastSubmit < config.submitCooldownMs) {
           if (status) status.textContent = '잠시 후 다시 제출해주세요.';
