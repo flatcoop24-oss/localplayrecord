@@ -1,10 +1,10 @@
 /*
   LOCAL PLAY RECORD 사이트 설정 파일
-  - 오늘의 라이브, 오늘의 뮤지션, 게스트 뮤지션은 이 파일만 수정하면 바뀝니다.
-  - GitHub에서 이 파일을 수정하고 Commit changes를 누르면 GitHub Actions가 자동으로 배포합니다.
-  - 자주 수정하는 곳은 currentEvent와 musicians입니다.
-  - sheetEndpoint가 비어 있으면 브라우저 로컬 저장소에만 저장됩니다.
-  - 실제 운영에서는 apps-script/Code.gs를 Google Apps Script에 배포한 뒤 Web App URL을 sheetEndpoint에 넣어주세요.
+  - Google Apps Script Web App URL을 sheetEndpoint에 넣으면 Google Sheet 운영 시트가 사이트의 원본 데이터가 됩니다.
+  - 오늘의 라이브는 Settings 탭, 오늘의 뮤지션/게스트 뮤지션은 Musicians 탭에서 수정합니다.
+  - 신청곡은 Requests 탭에, 응원 메시지는 Supports 탭에 누적 저장됩니다.
+  - sheetEndpoint가 비어 있으면 아래 config.js 기본값과 브라우저 로컬 저장소로만 작동합니다.
+  - 운영 시트: https://docs.google.com/spreadsheets/d/1On8Nv8jNJpan2siqLuZMGGKSGcGGHxG7p_oiIsEJjYI/edit
 */
 window.LPR_CONFIG = {
   brandName: 'LOCAL PLAY RECORD',
@@ -15,11 +15,12 @@ window.LPR_CONFIG = {
 
   // Google Apps Script Web App URL. 예: 'https://script.google.com/macros/s/AKfycb.../exec'
   sheetEndpoint: '',
+  remoteConfigTimeoutMs: 6000,
 
   // 관리자 화면은 정적 페이지용 간이 기능입니다. 실제 운영 데이터 관리는 Google Sheet에서 하는 것을 권장합니다.
   adminPassword: 'lpr-admin',
 
-  // 오늘의 라이브 정보: 행사명, 날짜, 시작 시간, 접수 상태를 여기서 바꿉니다.
+  // sheetEndpoint 연결 전 fallback 값입니다. 연결 후에는 Settings 탭 값이 우선 적용됩니다.
   currentEvent: {
     id: 'lpr-live-2026-06',
     title: '오늘의 로플레 라이브',
@@ -40,7 +41,7 @@ window.LPR_CONFIG = {
 
   emojis: ['👏', '🖤', '🔥', '🎧', '🌙', '✨'],
 
-  // 오늘의 뮤지션/게스트 뮤지션: name, genre, bio, time만 바꿔도 사이트에 반영됩니다.
+  // sheetEndpoint 연결 전 fallback 라인업입니다. 연결 후에는 Musicians 탭 값이 우선 적용됩니다.
   musicians: [
     {
       id: 'today-musician',
@@ -96,10 +97,10 @@ window.LPR_CONFIG = {
     if (adminCopy) {
       var paragraphs = adminCopy.querySelectorAll('p');
       if (paragraphs[1]) {
-        paragraphs[1].innerHTML = '오늘의 라이브, 오늘의 뮤지션, 게스트 뮤지션은 GitHub의 <strong>config.js</strong> 파일에서 수정하면 자동배포됩니다.';
+        paragraphs[1].innerHTML = '오늘의 라이브, 오늘의 뮤지션, 게스트 뮤지션은 <strong>Google Sheet 운영 시트</strong>의 Settings/Musicians 탭에서 수정합니다.';
       }
       if (paragraphs[2]) {
-        paragraphs[2].textContent = '이 화면은 같은 브라우저에서 접수된 로컬 데이터 확인과 CSV 내보내기를 지원합니다. 실제 운영 데이터는 Google Sheet 연결을 권장합니다.';
+        paragraphs[2].textContent = '신청곡과 응원 메시지는 Web App 연결 후 Google Sheet의 Requests/Supports 탭에 누적됩니다. 이 화면은 현재 브라우저 로컬 데이터 확인용입니다.';
       }
     }
   }
