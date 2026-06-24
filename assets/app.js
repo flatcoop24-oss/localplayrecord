@@ -352,7 +352,7 @@
           return;
         }
 
-        cooldownKey = `lpr:last-submit:${type}`;
+        const cooldownKey = `lpr:last-submit:${type}`;
         const lastSubmit = Number(localStorage.getItem(cooldownKey) || 0);
         if (Date.now() - lastSubmit < config.submitCooldownMs) {
           if (status) status.textContent = '잠시 후 다시 제출해주세요.';
