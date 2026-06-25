@@ -34,19 +34,27 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
-  document.addEventListener('DOMContentLoaded', async () => {
-    await loadSheetConfig();
-    hydrateConfigText();
-    renderOptions();
-    renderMusicians();
-    renderArchive();
-    renderStats();
+  document.addEventListener('DOMContentLoaded', () => {
+    applyCachedSheetConfig();
+    renderApp();
     bindNavigation();
     bindCounters();
     bindForms();
     bindAdmin();
     bindPresetButtons();
+
+    loadSheetConfig().then((updated) => {
+      if (updated) renderApp();
+    });
   });
+
+  function renderApp() {
+    hydrateConfigText();
+    renderOptions();
+    renderMusicians();
+    renderArchive();
+    renderStats();
+  }
 
   function mergeDeep(target, source) {
     const output = { ...target };
@@ -64,8 +72,39 @@
     return Object.prototype.toString.call(value) === '[object Object]';
   }
 
+  function sheetConfigCacheKey() {
+    return `lpr:sheet-config:${config.sheetEndpoint || 'local'}`;
+  }
+
+  function applyCachedSheetConfig() {
+    if (!config.sheetEndpoint) return false;
+
+    try {
+      const cached = JSON.parse(localStorage.getItem(sheetConfigCacheKey()) || 'null');
+      if (cached && cached.config) {
+        config = mergeDeep(config, cached.config);
+        return true;
+      }
+    } catch (error) {
+      console.warn('캐시된 Google Sheet 설정을 불러오지 못했습니다.', error);
+    }
+
+    return false;
+  }
+
+  function cacheSheetConfig(sheetConfig) {
+    try {
+      localStorage.setItem(sheetConfigCacheKey(), JSON.stringify({
+        savedAt: Date.now(),
+        config: sheetConfig
+      }));
+    } catch (error) {
+      console.warn('Google Sheet 설정 캐시에 실패했습니다.', error);
+    }
+  }
+
   async function loadSheetConfig() {
-    if (!config.sheetEndpoint) return;
+    if (!config.sheetEndpoint) return false;
 
     try {
       const response = await loadJsonp(config.sheetEndpoint, {
@@ -75,12 +114,16 @@
 
       if (response && response.ok && response.config) {
         config = mergeDeep(config, response.config);
+        cacheSheetConfig(response.config);
+        return true;
       } else if (response && response.error) {
         console.warn('Google Sheet 설정을 불러오지 못했습니다:', response.error);
       }
     } catch (error) {
       console.warn('Google Sheet 설정을 불러오지 못했습니다. config.js 값을 사용합니다.', error);
     }
+
+    return false;
   }
 
   function loadJsonp(endpoint, params = {}) {
@@ -150,30 +193,41 @@
   function renderOptions() {
     const moodSelect = $('[data-mood-options]');
     if (moodSelect) {
+      const selectedMood = moodSelect.value;
+      moodSelect.innerHTML = '<option value="">선택하지 않음</option>';
       config.moods.forEach((mood) => {
         const option = document.createElement('option');
         option.value = mood;
         option.textContent = mood;
         moodSelect.appendChild(option);
       });
+      if (config.moods.includes(selectedMood)) moodSelect.value = selectedMood;
     }
 
     const musicianSelect = $('[data-musician-options]');
     if (musicianSelect) {
+      const selectedMusician = musicianSelect.value;
+      musicianSelect.innerHTML = '<option value="">뮤지션 선택</option>';
       config.musicians.forEach((musician) => {
         const option = document.createElement('option');
         option.value = musician.id;
         option.textContent = musician.name;
         musicianSelect.appendChild(option);
       });
+      if (config.musicians.some((musician) => musician.id === selectedMusician)) {
+        musicianSelect.value = selectedMusician;
+      }
     }
 
     const emojiRow = $('[data-emoji-options]');
     if (emojiRow) {
+      const selectedEmoji = $('[name="emoji"]:checked')?.value;
+      emojiRow.innerHTML = '';
       config.emojis.forEach((emoji, index) => {
         const label = document.createElement('label');
+        const checked = selectedEmoji ? selectedEmoji === emoji : index === 0;
         label.setAttribute('aria-label', `${emoji} 응원 이모지`);
-        label.innerHTML = `<input type="radio" name="emoji" value="${escapeHtml(emoji)}" ${index === 0 ? 'checked' : ''} /> <span aria-hidden="true">${escapeHtml(emoji)}</span>`;
+        label.innerHTML = `<input type="radio" name="emoji" value="${escapeHtml(emoji)}" ${checked ? 'checked' : ''} /> <span aria-hidden="true">${escapeHtml(emoji)}</span>`;
         emojiRow.appendChild(label);
       });
     }
@@ -446,7 +500,7 @@
     bindCounters();
   }
 
-  async function submitRecord(type, payload) {
+  function submitRecord(type, payload) {
     const key = type === 'request' ? 'requests' : 'supports';
     saveLocalRecord(key, payload);
 
@@ -456,14 +510,21 @@
     body.set('type', key);
     body.set('payload', JSON.stringify(payload));
 
-    await fetch(config.sheetEndpoint, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: body.toString()
-    });
+    try {
+      fetch(config.sheetEndpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: body.toString()
+      }).catch((error) => {
+        console.warn('Google Sheet 저장 요청을 완료하지 못했습니다.', error);
+      });
+    } catch (error) {
+      console.warn('Google Sheet 저장 요청을 시작하지 못했습니다.', error);
+    }
   }
 
   function storageKey(type) {
