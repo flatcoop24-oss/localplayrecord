@@ -1,421 +1,1206 @@
 <!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="로컬플레이레코드 신청곡과 뮤지션 응원하기 페이지" />
-  <meta property="og:title" content="LOCAL PLAY RECORD" />
-  <meta property="og:description" content="오늘 듣고 싶은 음악을 신청하고 뮤지션에게 응원을 남겨주세요." />
-  <meta property="og:type" content="website" />
-  <title>LOCAL PLAY RECORD | 신청곡과 뮤지션 응원하기</title>
-  <link rel="preconnect" href="https://script.google.com" />
-  <link rel="preconnect" href="https://script.googleusercontent.com" />
-  <link rel="dns-prefetch" href="//script.google.com" />
-  <link rel="dns-prefetch" href="//script.googleusercontent.com" />
-  <link rel="stylesheet" href="assets/styles.css" />
-  <script src="config.js?v=20260625-realtime"></script>
-</head>
-<body>
-  <a class="skip-link" href="#main">본문으로 바로가기</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>플랫 사회적협동조합</title>
+    <meta
+      name="description"
+      content="플랫 사회적협동조합은 평택을 기반으로 동네를 무대로 만들고 사람을 연결합니다."
+    />
+    <link rel="icon" href="./assets/flat-logo-icon.png" type="image/png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <canvas class="ambient-canvas" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
 
-  <header class="site-header" data-header>
-    <div class="container nav-shell">
-      <a class="brand" href="#home" aria-label="로컬플레이레코드 홈">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="brand-copy">
-          <strong data-brand-name>LOCAL PLAY RECORD</strong>
-          <small>REQUEST · SUPPORT</small>
-        </span>
+    <header class="site-header" data-header>
+      <a class="brand" href="#hero" aria-label="플랫 홈">
+        <img class="brand-logo" src="./assets/flat-logo.png" alt="FLAT" />
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
-        메뉴
+
+      <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span class="sr-only">메뉴 열기</span>
       </button>
-      <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="주요 메뉴">
-        <a href="#request">신청곡</a>
-        <a href="#support">응원하기</a>
-        <a href="#live">오늘의 라이브</a>
-        <a href="#playlist">플레이리스트</a>
-        <a href="#archive">기록</a>
-        <a href="#admin">관리자</a>
+
+      <nav class="site-menu" id="site-menu" aria-label="주요 메뉴">
+        <a href="#about">ABOUT</a>
+        <a href="#spaces">SPACES</a>
+        <a href="#record">RECORD</a>
+        <a href="#archive">ARCHIVE</a>
+        <a href="#network">NETWORK</a>
       </nav>
-      <a class="header-cta" href="#request">오늘 신청하기</a>
-    </div>
-  </header>
 
-  <main id="main">
-    <section id="home" class="hero section">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Local Music Request Platform</p>
-          <h1>로플레의 오늘을<br />음악으로 채우는 곳.</h1>
-          <p class="hero-text">QR로 신청곡을 남기고, 현장의 뮤지션에게 응원을 보냅니다. 관객의 취향과 메시지는 오늘의 라이브 기록으로 남습니다.</p>
-          <div class="cta-row">
-            <a class="button primary" href="#request">신청곡 남기기</a>
-            <a class="button secondary" href="#support">뮤지션 응원하기</a>
+      <button class="header-contact" type="button" data-open-contact>CONTACT</button>
+    </header>
+
+    <main class="air-page">
+      <div class="air-scroll-field" aria-hidden="true">
+        <span class="air-scroll-axis air-scroll-axis-main"></span>
+        <span class="air-scroll-axis air-scroll-axis-side"></span>
+        <span class="air-scroll-progress"></span>
+        <span class="air-scroll-orbit orbit-a"></span>
+        <span class="air-scroll-orbit orbit-b"></span>
+      </div>
+
+      <section class="air-hero" id="hero">
+        <div class="air-3d-stage" data-air-3d aria-hidden="true">
+          <canvas class="air-webgl"></canvas>
+          <div class="css-3d-world">
+            <span class="css-axis css-axis-x"></span>
+            <span class="css-axis css-axis-y"></span>
+            <span class="css-axis css-axis-z"></span>
+            <div class="axis-node axis-node-origin"></div>
+            <div class="axis-node axis-node-x"></div>
+            <div class="axis-node axis-node-y"></div>
+            <div class="axis-node axis-node-z"></div>
+
+            <figure class="axis-plane plane-lpr">
+              <img src="./assets/local-play-record-night-web.jpg" alt="" />
+              <figcaption>LOCAL PLAY RECORD</figcaption>
+            </figure>
+            <figure class="axis-plane plane-record">
+              <img src="./assets/dive-art-poster-web.jpg" alt="" />
+              <figcaption>DIVE ART</figcaption>
+            </figure>
+            <figure class="axis-plane plane-social">
+              <img src="./assets/baramsae-socialing-web.jpg" alt="" />
+              <figcaption>SOCIALING</figcaption>
+            </figure>
+            <figure class="axis-plane plane-archive-a">
+              <img src="./assets/archive/archive-01-lpr-live.jpg" alt="" />
+              <figcaption>FRIDAY LIVE</figcaption>
+            </figure>
+            <figure class="axis-plane plane-archive-b">
+              <img src="./assets/archive/archive-17-dive-art-group.jpg" alt="" />
+              <figcaption>DIVE ART PEOPLE</figcaption>
+            </figure>
+            <figure class="axis-plane plane-archive-c">
+              <img src="./assets/archive/archive-09-today-artist-door.jpg" alt="" />
+              <figcaption>TODAY ARTIST</figcaption>
+            </figure>
+
+            <div class="axis-cube">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-          <div class="hero-metrics" aria-label="홈페이지 주요 기능">
-            <article><strong>01</strong><span>신청곡 접수</span></article>
-            <article><strong>02</strong><span>뮤지션 응원</span></article>
-            <article><strong>03</strong><span>공연 기록</span></article>
-          </div>
-          <p class="notice">좌석/테이블 번호는 받지 않습니다. 모든 신청곡은 현장 분위기와 공연 흐름에 맞춰 확인됩니다.</p>
+          <span class="axis-label axis-x">X / PEOPLE</span>
+          <span class="axis-label axis-y">Y / LOCAL</span>
+          <span class="axis-label axis-z">Z / RECORD</span>
         </div>
 
-        <div class="hero-interface" aria-label="음악 플랫폼형 화면 미리보기">
-          <div class="interface-window">
-            <div class="window-topbar">
-              <span></span><span></span><span></span>
-              <p>localplayrecord.kr/live</p>
-            </div>
-            <div class="interface-banner">
+        <div class="air-hero-inner">
+          <p class="air-kicker">FLAT SOCIAL COOPERATIVE</p>
+          <h1 class="air-title" aria-label="Awaken Local Play">
+            <span>A w a k e n</span>
+            <span>L o c a l,</span>
+            <span>( )</span>
+            <span>P l a y</span>
+            <span>E v e r y t h i n g</span>
+          </h1>
+          <p class="air-subtitle">
+            <span>본래의 동네 감각을 깨우고,</span>
+            <span>사람의 움직임을 관계로 연결합니다.</span>
+          </p>
+        </div>
+
+        <div class="air-symbols" aria-hidden="true">
+          <div class="air-symbol air-symbol-flat">
+            <img src="./assets/flat-logo.png" alt="" />
+          </div>
+          <div class="air-symbol air-symbol-lpr">
+            <img src="./assets/local-play-record-logo.png" alt="" />
+          </div>
+          <div class="air-ring"></div>
+        </div>
+
+        <div class="air-hero-bottom">
+          <span>Self Conditioning Local Project</span>
+          <span>Active Local Resource</span>
+        </div>
+      </section>
+
+      <section class="air-intro" id="about">
+        <div class="air-section-label">
+          <span>Chapter 1</span>
+          <span>( About / Concept )</span>
+        </div>
+        <h2>
+          사람을 발견하고,<br />
+          동네를 연결합니다.
+        </h2>
+        <p>
+          플랫은 평택을 기반으로 활동하는 사회적협동조합입니다. 음악, 편지,
+          투어, 기록을 통해 사람이 머무는 이유를 만들고, 일상이 서로 만나는
+          소셜링 프로젝트를 기획합니다.
+        </p>
+      </section>
+
+      <section class="air-chapter air-chapter-dark" id="spaces">
+        <div class="air-section-label">
+          <span>Chapter 2</span>
+          <span>( Spaces / Local Stage )</span>
+        </div>
+        <div class="air-split">
+          <div>
+            <h2>
+              일상과 일상이<br />
+              만나는 공간.
+            </h2>
+          </div>
+          <div class="air-space-grid">
+            <article class="air-cube">
+              <img src="./assets/local-play-record-day-web.jpg" alt="LOCAL PLAY RECORD 외관" />
               <div>
-                <span class="card-label mint">TODAY LIVE</span>
-                <h2 data-event-title>오늘의 로플레 라이브</h2>
-                <p data-event-description>오늘 이 공간에서 듣고 싶은 음악과 무대에 대한 응원을 남겨주세요.</p>
+                <span>01 / PYEONGTAEK STN.</span>
+                <h3>LOCAL PLAY RECORD</h3>
+                <p>평택역 - 연결과 만남. 매주 진행되는 다양한 소셜링이 열리는 복합문화공간.</p>
               </div>
-              <div class="disc" aria-hidden="true"></div>
-            </div>
-            <div class="search-shell" aria-hidden="true">
-              <span>듣고 싶은 곡을 검색하듯 남겨보세요</span>
-              <b>REQUEST</b>
-            </div>
-            <div class="track-list compact" aria-hidden="true">
-              <article class="track-row active">
-                <span class="rank">01</span>
-                <button type="button" tabindex="-1">▶</button>
-                <div class="track-main">
-                  <strong>오늘의 신청곡</strong>
-                  <small>Audience Pick · Live Mood</small>
-                </div>
-                <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                <span class="duration">03:12</span>
-              </article>
-              <article class="track-row">
-                <span class="rank">02</span>
-                <button type="button" tabindex="-1">▶</button>
-                <div class="track-main">
-                  <strong>응원 메시지</strong>
-                  <small>Musician Support</small>
-                </div>
-                <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                <span class="duration">LIVE</span>
-              </article>
-              <article class="track-row">
-                <span class="rank">03</span>
-                <button type="button" tabindex="-1">▶</button>
-                <div class="track-main">
-                  <strong>공연 아카이브</strong>
-                  <small>Local Record</small>
-                </div>
-                <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                <span class="duration">SAVE</span>
-              </article>
-            </div>
-          </div>
-          <div class="floating-card floating-status">
-            <span>신청곡</span>
-            <strong data-event-status>신청곡 접수중</strong>
-          </div>
-          <div class="floating-card floating-count">
-            <span>LOCAL DATA</span>
-            <strong><b data-request-count>0</b>곡 · <b data-support-count>0</b>응원</strong>
+            </article>
+            <article class="air-cube">
+              <img src="./assets/flat-archive-room-web.jpg" alt="FLAT 인쇄창작아카이브룸" />
+              <div>
+                <span>02 / GODEOK</span>
+                <h3>인쇄창작아카이브룸</h3>
+                <p>고덕 - 아카이브룸. 지역의 장면을 편집, 인쇄, 기록으로 남기는 작업실.</p>
+              </div>
+            </article>
+            <article class="air-cube">
+              <img src="./assets/archive/archive-13-buildout.jpg" alt="LOCAL PLAY RECORD 공간 조성 현장" loading="lazy" />
+              <div>
+                <span>03 / BUILDING</span>
+                <h3>공간 발견</h3>
+                <p>공간을 찾고 사람이 만나는 장소로 바꿔냅니다.</p>
+              </div>
+            </article>
+            <article class="air-cube">
+              <img src="./assets/archive/archive-14-artist-bar.jpg" alt="Today Artist 전시가 놓인 바 공간" loading="lazy" />
+              <div>
+                <span>04 / TODAY ARTIST</span>
+                <h3>오늘의 아티스트</h3>
+                <p>로컬플레이레코드 2층에서 펼쳐지는 창작자들의 세상.</p>
+              </div>
+            </article>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="ticker" aria-label="서비스 키워드">
-      <div class="ticker-track">
-        <span>REQUEST</span><span>SUPPORT</span><span>LIVE</span><span>ARCHIVE</span><span>LOCAL ARTIST</span><span>PLAYLIST</span>
-        <span>REQUEST</span><span>SUPPORT</span><span>LIVE</span><span>ARCHIVE</span><span>LOCAL ARTIST</span><span>PLAYLIST</span>
-      </div>
-    </section>
-
-    <section id="request" class="section request-section">
-      <div class="container section-heading split-heading">
-        <div>
-          <p class="eyebrow">Song Request</p>
-          <h2>오늘 듣고 싶은 노래를<br />신청해 주세요.</h2>
+      <section class="air-chapter air-chapter-light" id="work">
+        <div class="air-section-label">
+          <span>Chapter 3</span>
+          <span>( Socialing / Active Local Resource )</span>
         </div>
-        <p>곡명과 아티스트만으로도 접수됩니다. 사연은 공개 동의한 경우에만 로플레 기록/SNS 콘텐츠로 활용합니다.</p>
-      </div>
+        <h2>
+          소셜링,<br />
+          사람이 사람을 만나 만들어지는 거대한 세상.
+        </h2>
+        <div class="air-keywords">
+          <button type="button">For Music</button>
+          <button type="button">For Letter</button>
+          <button type="button">For Tour</button>
+          <button type="button">For Relation</button>
+          <button type="button">For Archive</button>
+          <button type="button">For Local</button>
+        </div>
+        <div class="air-scene-strip" aria-label="소셜링 프로젝트 이미지">
+          <figure>
+            <img src="./assets/archive/archive-01-lpr-live.jpg" alt="로컬플레이레코드 금요일 공연" loading="lazy" />
+            <figcaption>Music</figcaption>
+          </figure>
+          <figure>
+            <img src="./assets/archive/archive-04-music-request.jpg" alt="로컬플레이레코드 신청곡 카드" loading="lazy" />
+            <figcaption>Request</figcaption>
+          </figure>
+          <figure>
+            <img src="./assets/archive/archive-11-workshop.jpg" alt="평택 마을 워크숍 현장" loading="lazy" />
+            <figcaption>Workshop</figcaption>
+          </figure>
+          <figure>
+            <img src="./assets/archive/archive-16-local-drink.jpg" alt="로컬 전통주 병" loading="lazy" />
+            <figcaption>Local Drink</figcaption>
+          </figure>
+          <figure>
+            <img src="./assets/archive/archive-10-sunset-roadmap.jpg" alt="평택 선셋로드 지도" loading="lazy" />
+            <figcaption>Tour</figcaption>
+          </figure>
+        </div>
+      </section>
 
-      <div class="container request-layout">
-        <form class="form-card request-card" data-form="request" novalidate>
-          <div class="form-card-head">
-            <span class="card-label">REQUEST FORM</span>
-            <h3>신청곡 접수</h3>
+      <section class="air-chapter air-chapter-green" id="record">
+        <div class="air-section-label">
+          <span>Chapter 4</span>
+          <span>( Record / Project )</span>
+        </div>
+        <div class="air-record-head">
+          <h2>
+            기록은 과거와 현재를<br />
+            연결합니다.
+          </h2>
+          <p>
+            축제, 전시, 포스터, 매거진은 단순한 결과물이 아니라 다음 만남을 여는
+            로컬의 에너지입니다.
+          </p>
+        </div>
+        <div class="air-record-grid">
+          <article class="air-card-tall">
+            <img src="./assets/ordinary-art-poster-web.jpg" alt="가장 보통의 예술 포스터" />
+            <span>2024 / 가장보통의예술</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/dive-art-poster-web.jpg" alt="다이브 아트 포스터" />
+            <span>2025 / Dive ART</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/baramsae-socialing-web.jpg" alt="바람새마을축제 현장" />
+            <span>2025 / PINK WAVE</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/record-cover-web.jpg" alt="쌈뽕 기록물 표지" />
+            <span>2026 / SSAM@PPONG</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/archive/archive-07-ordinary-art-group.jpg" alt="가장 보통의 예술 단체 사진" loading="lazy" />
+            <span>2024 / Ordinary Art People</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/archive/archive-03-cross-space.jpg" alt="교차공간 818 결과보고전 포스터" loading="lazy" />
+            <span>2024 / 교차공간 818</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/archive/archive-02-flat-sharing.jpg" alt="FLAT 결과공유회 초대장" loading="lazy" />
+            <span>2024 / 결과공유회</span>
+          </article>
+          <article class="air-card-tall">
+            <img src="./assets/archive/archive-17-dive-art-group.jpg" alt="Dive ART 단체 사진" loading="lazy" />
+            <span>2025 / Dive ART People</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="air-atlas" id="archive">
+        <div class="air-section-label">
+          <span>Chapter 5</span>
+          <span>( Scene Archive / Image Wall )</span>
+        </div>
+        <div class="air-atlas-head">
+          <h2>
+            플랫이<br />
+            연결해온 길.
+          </h2>
+          <p>
+            공연, 포스터, 전시, 협약, 워크숍, 공간 조성, 로컬 술까지.
+            흩어진 장면들을 하나의 3D 아카이브 벽으로 연결했습니다.
+          </p>
+        </div>
+        <div class="air-atlas-grid" aria-label="플랫 활동 이미지 아카이브">
+          <figure class="air-atlas-card tall">
+            <img src="./assets/archive/archive-01-lpr-live.jpg" alt="로컬플레이레코드 앞 공연 장면" loading="lazy" />
+            <figcaption>01 / Friday Live</figcaption>
+          </figure>
+          <figure class="air-atlas-card poster">
+            <img src="./assets/archive/archive-02-flat-sharing.jpg" alt="FLAT 결과공유회 초대장" loading="lazy" />
+            <figcaption>02 / Sharing Day</figcaption>
+          </figure>
+          <figure class="air-atlas-card poster">
+            <img src="./assets/archive/archive-03-cross-space.jpg" alt="교차공간 818 결과보고전 포스터" loading="lazy" />
+            <figcaption>03 / Cross Space</figcaption>
+          </figure>
+          <figure class="air-atlas-card">
+            <img src="./assets/archive/archive-04-music-request.jpg" alt="로컬플레이레코드 신청곡 카드" loading="lazy" />
+            <figcaption>04 / Request Card</figcaption>
+          </figure>
+          <figure class="air-atlas-card">
+            <img src="./assets/archive/archive-05-agreement.jpg" alt="평택형 예비사회적기업 협약 체결식" loading="lazy" />
+            <figcaption>05 / Agreement</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-06-donghaeng.jpg" alt="FLAT과 동행 전시 부스" loading="lazy" />
+            <figcaption>06 / Exhibition Booth</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-07-ordinary-art-group.jpg" alt="가장 보통의 예술 단체 사진" loading="lazy" />
+            <figcaption>07 / Ordinary Art</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-08-lpr-record-visit.jpg" alt="LOCAL PLAY RECORD 외관과 방문자" loading="lazy" />
+            <figcaption>08 / Record Visit</figcaption>
+          </figure>
+          <figure class="air-atlas-card tall">
+            <img src="./assets/archive/archive-09-today-artist-door.jpg" alt="Today Artist 일정이 적힌 유리문" loading="lazy" />
+            <figcaption>09 / Today Artist</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-10-sunset-roadmap.jpg" alt="평택 선셋로드 지도" loading="lazy" />
+            <figcaption>10 / Sunset Road</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-11-workshop.jpg" alt="마을 워크숍 참여자들" loading="lazy" />
+            <figcaption>11 / Workshop</figcaption>
+          </figure>
+          <figure class="air-atlas-card tall">
+            <img src="./assets/archive/archive-12-gallery-hanging.jpg" alt="전시장에 걸린 작품" loading="lazy" />
+            <figcaption>12 / Hanging</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-13-buildout.jpg" alt="로컬플레이레코드 공간 조성 현장" loading="lazy" />
+            <figcaption>13 / Build Out</figcaption>
+          </figure>
+          <figure class="air-atlas-card tall">
+            <img src="./assets/archive/archive-14-artist-bar.jpg" alt="Today Artist가 놓인 바 공간" loading="lazy" />
+            <figcaption>14 / Artist Bar</figcaption>
+          </figure>
+          <figure class="air-atlas-card tall">
+            <img src="./assets/archive/archive-15-notes-wall.jpg" alt="작품 옆에 붙은 관객 메모" loading="lazy" />
+            <figcaption>15 / Notes</figcaption>
+          </figure>
+          <figure class="air-atlas-card tall">
+            <img src="./assets/archive/archive-16-local-drink.jpg" alt="로컬 전통주 병이 놓인 장면" loading="lazy" />
+            <figcaption>16 / Local Drink</figcaption>
+          </figure>
+          <figure class="air-atlas-card wide">
+            <img src="./assets/archive/archive-17-dive-art-group.jpg" alt="Dive ART 단체 사진" loading="lazy" />
+            <figcaption>17 / Dive ART Group</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="air-interview" id="network">
+        <div class="air-section-label">
+          <span>Chapter 6</span>
+          <span>( Network / Interview )</span>
+        </div>
+        <h2>
+          각자의 일상에서 출발한 사람들이<br />
+          동네의 가능성을 넓힙니다.
+        </h2>
+        <div class="air-marquee" aria-hidden="true">
+          <span>문화활동가</span>
+          <span>창작자</span>
+          <span>지역생산자</span>
+          <span>로컬양조장</span>
+          <span>청년농업인</span>
+          <span>기획자</span>
+          <span>문화활동가</span>
+          <span>창작자</span>
+          <span>지역생산자</span>
+          <span>로컬양조장</span>
+        </div>
+      </section>
+
+      <section class="air-product" id="contact">
+        <div class="air-product-card">
+          <span>Active Local Resource</span>
+          <h2>
+            공연, 대관, 협업, 취재.<br />
+            지금 필요한 연결을 열어주세요.
+          </h2>
+          <button class="air-contact-button" type="button" data-open-contact>
+            Project Request
+          </button>
+        </div>
+        <div class="air-business">
+          <p>플랫(FLAT) 사회적협동조합 / 대표 최강재</p>
+          <p>사업자등록번호 683-81-03553</p>
+          <p>경기도 평택시 고덕여염로 20, 1701동 1층 사회적기업2호</p>
+        </div>
+      </section>
+    </main>
+
+    <main class="receipt-page displace" id="receipt">
+      <section class="receipt-focus" id="receipt-hero">
+        <div class="receipt-cover">
+          <img src="./assets/flat-logo.png" alt="FLAT" />
+        </div>
+
+        <div class="receipt-pad">
+          <div class="receipt-triad">
+            <span>LOCAL</span>
+            <span>↔</span>
+            <span>SOCIALING</span>
           </div>
 
-          <div class="form-row">
-            <label for="requestNickname">닉네임 <span aria-hidden="true">*</span></label>
-            <input id="requestNickname" name="nickname" type="text" maxlength="20" required placeholder="예: 로플레친구" autocomplete="nickname" />
-            <p class="field-error" data-error-for="requestNickname"></p>
+          <div class="receipt-center">
+            <p>PYEONGTAEK, KOREA</p>
+            <button class="receipt-link" type="button" data-open-contact>PROJECT REQUEST</button>
           </div>
 
-          <div class="form-grid-2">
-            <div class="form-row">
-              <label for="songTitle">신청곡 제목 <span aria-hidden="true">*</span></label>
-              <input id="songTitle" name="songTitle" type="text" maxlength="80" required placeholder="예: 밤편지" />
-              <p class="field-error" data-error-for="songTitle"></p>
+          <div class="receipt-order">
+            <p>
+              Order #2026<br />
+              for a Lovely Neighbor
+            </p>
+            <time data-receipt-date>Jun 25, 2026 02:00pm</time>
+          </div>
+
+          <div class="receipt-rule"></div>
+
+          <h1>
+            <span>사람을 연결하고</span>
+            <span>동네는 무대가 됩니다.</span>
+          </h1>
+          <p class="receipt-lead">
+            플랫은 음악, 편지, 투어, 관계로 이어지는 소셜링 프로젝트를 기획하며
+            평택의 일상과 일상을 연결합니다.
+          </p>
+
+          <div class="receipt-stamps" aria-label="플랫 기록 이미지">
+            <img src="./assets/local-play-record-night-web.jpg" alt="LOCAL PLAY RECORD 밤 외관" />
+            <img src="./assets/baramsae-socialing-web.jpg" alt="바람새마을축제 소셜링 현장" />
+            <img src="./assets/ordinary-art-poster-web.jpg" alt="가장 보통의 예술 포스터" />
+            <img src="./assets/dive-art-poster-web.jpg" alt="다이브 아트 포스터" />
+          </div>
+        </div>
+
+        <section class="receipt-section" id="receipt-about">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>FLAT?</span>
+            <span>INFO</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <p>
+            평택을 기반으로 활동하는 사회적협동조합. 동네라는 규모의 공간에
+            누구나 즐길 수 있는 무대를 만들고, 사람과 사람의 관계를 기획합니다.
+          </p>
+        </section>
+
+        <section class="receipt-section" id="receipt-spaces">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>SPACES</span>
+            <span>AREA</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <a class="receipt-row" href="#contact">
+            <span>01</span>
+            <span>LOCAL PLAY RECORD<br />평택역 - 연결과 만남</span>
+            <span>STN</span>
+          </a>
+          <a class="receipt-row" href="#contact">
+            <span>02</span>
+            <span>FLAT 인쇄창작아카이브룸<br />고덕 - 아카이브룸</span>
+            <span>GDK</span>
+          </a>
+        </section>
+
+        <section class="receipt-section" id="receipt-work">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>SOCIALING PROJECT</span>
+            <span>KEY</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <div class="receipt-row">
+            <span>01</span>
+            <span>음악으로 만나는 밤</span>
+            <span>MUSIC</span>
+          </div>
+          <div class="receipt-row">
+            <span>02</span>
+            <span>편지와 기록으로 남는 관계</span>
+            <span>LETTER</span>
+          </div>
+          <div class="receipt-row">
+            <span>03</span>
+            <span>도시를 걷고 발견하는 투어</span>
+            <span>TOUR</span>
+          </div>
+          <div class="receipt-row">
+            <span>04</span>
+            <span>매주 진행되는 다양한 소셜링</span>
+            <span>MEET</span>
+          </div>
+        </section>
+
+        <section class="receipt-section" id="receipt-record">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>RECORD</span>
+            <span>YEAR</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <a class="receipt-row" href="#contact">
+            <span>01</span>
+            <span>가장보통의예술 전시 기획</span>
+            <span>2024</span>
+          </a>
+          <a class="receipt-row" href="#contact">
+            <span>02</span>
+            <span>아트페스타 평택 Dive ART</span>
+            <span>2025</span>
+          </a>
+          <a class="receipt-row" href="#contact">
+            <span>03</span>
+            <span>바람새마을축제 PINK WAVE</span>
+            <span>2025</span>
+          </a>
+          <a class="receipt-row" href="#contact">
+            <span>04</span>
+            <span>LOCAL PLAY RECORD 개소</span>
+            <span>2025</span>
+          </a>
+          <a class="receipt-row" href="#contact">
+            <span>05</span>
+            <span>로컬 음반 제작 / 로컬 투어 기획</span>
+            <span>2026</span>
+          </a>
+        </section>
+
+        <section class="receipt-section" id="receipt-network">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>NETWORK</span>
+            <span>TYPE</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <div class="receipt-row">
+            <span>01</span>
+            <span>문화활동가 / 창작자 / 기획자</span>
+            <span>PEOPLE</span>
+          </div>
+          <div class="receipt-row">
+            <span>02</span>
+            <span>지역생산자 / 로컬양조장 / 청년농업인</span>
+            <span>LOCAL</span>
+          </div>
+          <div class="receipt-row">
+            <span>03</span>
+            <span>대추리평화마을 / 에이쿠드 / 지역 기관</span>
+            <span>PARTNER</span>
+          </div>
+        </section>
+
+        <section class="receipt-section" id="receipt-contact">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>CONTACT</span>
+            <span>NOW</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <button class="receipt-row receipt-button-row" type="button" data-open-contact>
+            <span>01</span>
+            <span>공연 / 대관 / 협업 / 취재 문의</span>
+            <span>OPEN</span>
+          </button>
+        </section>
+
+        <section class="receipt-section receipt-business" aria-label="사업자 정보">
+          <div class="receipt-rule"></div>
+          <div class="receipt-heading">
+            <span>#</span>
+            <span>BUSINESS INFO</span>
+            <span>REG</span>
+          </div>
+          <div class="receipt-rule"></div>
+          <div class="receipt-row">
+            <span>상호</span>
+            <span>플랫(FLAT) 사회적협동조합</span>
+            <span></span>
+          </div>
+          <div class="receipt-row">
+            <span>대표</span>
+            <span>최강재</span>
+            <span></span>
+          </div>
+          <div class="receipt-row">
+            <span>번호</span>
+            <span>683-81-03553</span>
+            <span></span>
+          </div>
+          <div class="receipt-row">
+            <span>주소</span>
+            <span>경기도 평택시 고덕여염로 20, 1701동 1층 사회적기업2호</span>
+            <span></span>
+          </div>
+          <div class="receipt-row">
+            <span>업종</span>
+            <span>서비스 / 출판 / 로컬크리에이팅</span>
+            <span></span>
+          </div>
+        </section>
+
+        <div class="receipt-thanks">
+          <span>* * *</span>
+          <strong>Thank you<br />for your visit</strong>
+        </div>
+      </section>
+
+      <section class="hero" id="legacy-hero">
+        <div class="hero-pattern" aria-hidden="true">
+          <span class="scan-line line-a"></span>
+          <span class="scan-line line-b"></span>
+          <span class="scan-line line-c"></span>
+        </div>
+
+        <div class="receipt-meta reveal is-visible">
+          <div class="receipt-meta-top">
+            <span>LOCAL</span>
+            <span class="receipt-mark">↔</span>
+            <span>PLAY</span>
+          </div>
+          <p>
+            Order #2026<br />
+            for a Lovely Neighbor
+          </p>
+          <time data-receipt-date>Jun 25, 2026 02:00pm</time>
+        </div>
+
+        <div class="hero-copy reveal is-visible">
+          <p class="eyebrow">FLAT SOCIAL COOPERATIVE</p>
+          <h1>
+            <span>사람을 연결하고</span>
+            <span>동네는 무대가 됩니다.</span>
+          </h1>
+          <p class="hero-lead">
+            플랫은 음악, 편지, 투어, 관계로 이어지는 소셜링 프로젝트를
+            기획하며, 평택의 일상과 일상을 연결합니다.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#spaces">공간 보기</a>
+            <button class="button ghost" type="button" data-open-contact>협업 문의</button>
+          </div>
+        </div>
+
+        <div class="hero-stage reveal is-visible" aria-label="플랫 활동 키워드">
+          <div class="poster poster-main">
+            <img
+              class="poster-photo"
+              src="./assets/local-play-record-night-web.jpg"
+              alt="밤에 빛나는 LOCAL PLAY RECORD 네온 간판"
+            />
+            <span class="poster-kicker">LOCAL PLAY RECORD</span>
+            <div class="poster-logo-plate">
+              <img
+                src="./assets/local-play-record-logo.png"
+                alt="LOCAL PLAY RECORD 로고"
+              />
+            </div>
+            <span>평택역 - 연결과 만남</span>
+          </div>
+          <div class="socialing-card">
+            <span>SOCIALING PROJECT</span>
+            <strong>음악 · 편지 · 투어 · 관계</strong>
+            <p>서로 다른 일상이 만나 관계가 되는 플랫의 메인 프로젝트</p>
+          </div>
+        </div>
+
+        <div class="hero-footer">
+          <span>PYEONGTAEK</span>
+          <span>LOCAL / PLAY / RECORD</span>
+          <span>2026</span>
+        </div>
+      </section>
+
+      <section class="section about-section" id="legacy-about">
+        <div class="section-label reveal">
+          <span>01</span>
+          <strong>ABOUT</strong>
+        </div>
+        <div class="about-grid">
+          <div class="about-copy reveal">
+            <p class="eyebrow">WHO WE ARE</p>
+            <h2>FLAT?</h2>
+            <p>
+              플랫은 평택을 기반으로 활동하는 사회적협동조합입니다. 동네라는
+              규모의 공간에 누구나 즐길 수 있는 무대를 만들고, 로컬 생산자들이
+              교류할 수 있는 프로그램을 기획합니다.
+            </p>
+          </div>
+          <div class="value-list">
+            <article class="value-card reveal">
+              <span>COMMUNITY</span>
+              <h3>지역 공동체</h3>
+              <p>어디든지 존재하는 가장 귀한 가치, 사람을 찾습니다.</p>
+            </article>
+            <article class="value-card reveal">
+              <span>ART</span>
+              <h3>문화 예술</h3>
+              <p>가장 자유롭고 부드러운 방법으로 우리를 표현합니다.</p>
+            </article>
+            <article class="value-card reveal">
+              <span>SUSTAIN</span>
+              <h3>지속 가능성</h3>
+              <p>함께 만들어가는 과정에 가장 중요한 것은 지속이라 생각합니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section spaces-section" id="legacy-spaces">
+        <div class="section-label reveal">
+          <span>02</span>
+          <strong>SPACES</strong>
+        </div>
+        <div class="spaces-head reveal">
+          <p class="eyebrow">OUR SPACES</p>
+          <h2>
+            <span>평택역 - 연결과 만남</span>
+            <span>고덕 - 아카이브룸</span>
+          </h2>
+        </div>
+
+        <div class="space-layout">
+          <div class="space-tabs reveal" role="tablist" aria-label="운영 공간">
+            <button class="space-tab is-active" type="button" data-space="lpr">
+              LOCAL PLAY RECORD
+            </button>
+            <button class="space-tab" type="button" data-space="archive">
+              FLAT 인쇄창작아카이브룸
+            </button>
+          </div>
+
+          <div class="space-showcase reveal">
+            <div class="space-visual" data-space-visual data-space-kind="lpr">
+              <img
+                class="space-photo"
+                src="./assets/local-play-record-day-web.jpg"
+                alt="LOCAL PLAY RECORD 낮 외관과 초록 네온 간판"
+              />
+              <span class="visual-index">PYEONGTAEK STN.</span>
+              <div class="space-logo-plate">
+                <img
+                  src="./assets/local-play-record-logo.png"
+                  alt="LOCAL PLAY RECORD 로고"
+                />
+              </div>
+              <strong>일상과 일상이 만나는 공간.</strong>
+              <div class="level-stack" aria-hidden="true">
+                <span>2F PERFORMANCE</span>
+                <span>1F LOCAL DRINKS</span>
+              </div>
             </div>
 
-            <div class="form-row">
-              <label for="artistName">아티스트명 <span aria-hidden="true">*</span></label>
-              <input id="artistName" name="artistName" type="text" maxlength="80" required placeholder="예: 아이유" />
-              <p class="field-error" data-error-for="artistName"></p>
+            <div class="space-detail">
+              <p class="eyebrow" data-space-kicker>LOCAL PLAY RECORD</p>
+              <h3 data-space-title>일상과 일상이 만나는 공간.</h3>
+              <p data-space-body>
+                1F는 경기도 양조장과 함께 고르고 채우는 로컬 전통주 공간,
+                2F는 매주 진행되는 다양한 소셜링이 열리는 복합문화공간입니다.
+              </p>
+              <ul class="space-points" data-space-points>
+                <li>매주 진행되는 다양한 소셜링</li>
+                <li>지역 생산자와 연결되는 로컬 F&B</li>
+                <li>공연, 대관, 팝업 협업 가능</li>
+              </ul>
+              <button class="button primary compact" type="button" data-open-contact>
+                공간 문의하기
+              </button>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div class="form-row">
-            <label for="mood">오늘의 분위기</label>
-            <select id="mood" name="mood" data-mood-options>
-              <option value="">선택하지 않음</option>
-            </select>
+      <section class="section work-section" id="legacy-work">
+        <div class="section-label reveal">
+          <span>03</span>
+          <strong>WHAT WE DO</strong>
+        </div>
+        <div class="work-intro reveal">
+          <p class="eyebrow">SOCIALING PROJECT</p>
+          <h2>소셜링, 사람이 사람을 만나 만들어지는 거대한 세상.</h2>
+        </div>
+        <article class="socialing-showcase reveal">
+          <img
+            src="./assets/baramsae-socialing-web.jpg"
+            alt="바람새마을축제 야외 공연과 소셜링 공간"
+          />
+          <div>
+            <span>CASE / BARAMSAE VILLAGE FESTIVAL</span>
+            <h3>바람새마을축제 PINK WAVE</h3>
+            <p>
+              음악이 흐르고, 사람들이 앉아 머물고, 동네의 이야기가 관계로 이어지는
+              소셜링 프로젝트의 실제 장면입니다.
+            </p>
           </div>
-
-          <div class="form-row">
-            <label for="reason">신청 이유</label>
-            <textarea id="reason" name="reason" rows="4" maxlength="300" placeholder="이 노래를 듣고 싶은 이유를 가볍게 남겨주세요."></textarea>
-            <p class="counter"><span data-counter-for="reason">0</span>/300</p>
+        </article>
+        <article class="record-cover-card reveal">
+          <img src="./assets/record-cover-web.jpg" alt="매거진 쌈뽕 기록물 표지" />
+          <div>
+            <span>RECORD / SSAM@PPONG VOL.01</span>
+            <h3>소셜링은 기록물로 남습니다.</h3>
+            <p>
+              사람이 만나고 머문 장면을 매거진, 편집물, 아카이브로 다시 엮어
+              동네의 이야기가 오래 이어지게 합니다.
+            </p>
           </div>
+        </article>
+        <div class="work-grid">
+          <article class="work-card reveal">
+            <span>01</span>
+            <h3>소셜링 프로젝트</h3>
+            <p>
+              음악, 편지, 투어, 관계라는 키워드로 서로 다른 일상이 만나는 장면을
+              기획합니다.
+            </p>
+          </article>
+          <article class="work-card reveal">
+            <span>02</span>
+            <h3>기록과 콘텐츠</h3>
+            <p>
+              소셜링 프로젝트의 장면과 사람의 이야기를 매거진, 편집물,
+              아카이브로 남깁니다.
+            </p>
+          </article>
+          <article class="work-card reveal">
+            <span>03</span>
+            <h3>지역 연결</h3>
+            <p>
+              보조금 사업, 지역 생산자, 청년예술인 지원사업을 운영하며 관계를
+              연결합니다.
+            </p>
+          </article>
+        </div>
 
-          <label class="checkbox-row">
-            <input name="isPublic" type="checkbox" value="yes" />
-            <span>신청곡과 사연을 로플레 기록/SNS에 익명 공개해도 괜찮아요.</span>
-          </label>
+        <div class="stat-row reveal">
+          <div class="stat">
+            <strong data-count="9">0</strong>
+            <span>주요 활동</span>
+          </div>
+          <div class="stat">
+            <strong data-count="2">0</strong>
+            <span>운영 공간</span>
+          </div>
+          <div class="stat">
+            <strong data-count="3">0</strong>
+            <span>활동 축</span>
+          </div>
+        </div>
+      </section>
 
-          <input class="visually-hidden" name="website" tabindex="-1" autocomplete="off" />
+      <section class="section record-section" id="legacy-record">
+        <div class="section-label reveal">
+          <span>04</span>
+          <strong>RECORD</strong>
+        </div>
+        <div class="record-head reveal">
+          <p class="eyebrow">WHAT WE HAVE DONE</p>
+          <h2>실제로 해온 것</h2>
+        </div>
+        <article class="record-feature record-feature-quiet reveal">
+          <div class="record-feature-media">
+            <img
+              src="./assets/ordinary-art-poster-web.jpg"
+              alt="가장 보통의 예술 전시 포스터"
+            />
+          </div>
+          <div class="record-feature-copy">
+            <span>PROJECT / ORDINARY ART</span>
+            <h3>가장 보통의 예술</h3>
+            <p>
+              평택역 앞 일상의 공간에서 보통의 감각을 예술로 바라본 전시
+              프로젝트입니다. 지역의 창작자와 관객이 느슨하게 만나는 첫 장면을
+              만들었습니다.
+            </p>
+            <div class="record-feature-meta" aria-label="가장 보통의 예술 정보">
+              <span>2023.12.20 - 2024.01.20</span>
+              <span>평택역 모이라이랩 roastery</span>
+              <span>문화예술지대 FLAT</span>
+            </div>
+          </div>
+        </article>
+        <article class="record-feature reveal">
+          <div class="record-feature-media">
+            <img src="./assets/dive-art-poster-web.jpg" alt="2025 아트페스타 평택 다이브 아트 포스터" />
+          </div>
+          <div class="record-feature-copy">
+            <span>PROJECT / ART FESTA PYEONGTAEK</span>
+            <h3>다이브 아트 Dive ART</h3>
+            <p>
+              평택의 예술 활동이 관객과 만나는 축제형 프로젝트입니다. 포스터,
+              공연, 현장 운영의 감각을 하나의 기록으로 이어갑니다.
+            </p>
+            <div class="record-feature-meta" aria-label="다이브 아트 정보">
+              <span>2025.09.20 - 09.21</span>
+              <span>오프닝 공연 12:00 - 13:00</span>
+              <span>협력단체 FLAT</span>
+            </div>
+          </div>
+        </article>
+        <div class="timeline">
+          <article class="timeline-item reveal">
+            <time>2024.01</time>
+            <p>'가장보통의예술' 전시 기획</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2024.04</time>
+            <p>평택시사회적경제마을공동체 예비사회적기업지원사업 공모 선정</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2025.08</time>
+            <p>아트페스타 평택 DiveART 총괄 기획</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2025.09</time>
+            <p>LOCAL PLAY RECORD 개소</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2025.10</time>
+            <p>바람새마을축제 PINK WAVE 총괄 기획 및 운영</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2026.03</time>
+            <p>LOCAL PLAY RECORD Live 공연 진행</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2026.05</time>
+            <p>평택역 인근 상가 협업: 오 일상 속 자유 팝업 진행</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2026.05</time>
+            <p>평택시문화재단 청년예술인지원사업 선정: 로컬 음반 제작 기획</p>
+          </article>
+          <article class="timeline-item reveal">
+            <time>2026.05</time>
+            <p>경기도사회적경제원 협업화지원사업 선정: 로컬 투어 기획</p>
+          </article>
+        </div>
+      </section>
 
-          <button class="button primary full" type="submit">신청곡 접수하기</button>
-          <p class="form-status" role="status" aria-live="polite" data-status></p>
-        </form>
+      <section class="section network-section" id="legacy-network">
+        <div class="section-label reveal">
+          <span>05</span>
+          <strong>NETWORK</strong>
+        </div>
+        <div class="network-head reveal">
+          <p class="eyebrow">PARTNERS</p>
+          <h2>협력 네트워크</h2>
+        </div>
+        <div class="marquee" aria-label="협력 네트워크 목록">
+          <div class="marquee-track">
+            <span>문화활동가</span>
+            <span>창작자 / 기획자</span>
+            <span>지역생산자</span>
+            <span>로컬양조장</span>
+            <span>청년농업인</span>
+            <span>평택시사회적경제마을공동체지원센터</span>
+            <span>대추리평화마을</span>
+            <span>주식회사 에이쿠드</span>
+            <span>문화활동가</span>
+            <span>창작자 / 기획자</span>
+            <span>지역생산자</span>
+            <span>로컬양조장</span>
+            <span>청년농업인</span>
+            <span>평택시사회적경제마을공동체지원센터</span>
+            <span>대추리평화마을</span>
+            <span>주식회사 에이쿠드</span>
+          </div>
+        </div>
+      </section>
 
-        <aside class="hot-panel" aria-label="신청곡 운영 안내">
-          <div class="hot-panel-head">
+      <section class="contact-band" id="legacy-contact">
+        <div class="contact-band-copy reveal">
+          <p class="eyebrow">GET IN TOUCH</p>
+          <h2>공연, 대관, 협업, 취재 문의를 기다립니다.</h2>
+        </div>
+        <button class="button light" type="button" data-open-contact>문의 패널 열기</button>
+      </section>
+
+      <section class="business-info" aria-label="사업자 정보">
+        <div class="business-inner reveal">
+          <div class="business-title">
+            <p class="eyebrow">BUSINESS INFO</p>
+            <h2>플랫(FLAT) 사회적협동조합</h2>
+          </div>
+          <dl class="business-list">
             <div>
-              <p class="eyebrow">Hot Request Flow</p>
-              <h3>접수된 곡은 이렇게 확인돼요.</h3>
+              <dt>대표자</dt>
+              <dd>최강재</dd>
             </div>
-            <span class="pill">NO TABLE NO.</span>
-          </div>
-          <div class="track-list">
-            <article class="track-row active">
-              <span class="rank">01</span>
-              <button type="button" tabindex="-1" aria-hidden="true">▶</button>
-              <div class="track-main">
-                <strong>곡명 · 아티스트 확인</strong>
-                <small>필수 정보만 빠르게 접수</small>
-              </div>
-              <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            </article>
-            <article class="track-row">
-              <span class="rank">02</span>
-              <button type="button" tabindex="-1" aria-hidden="true">▶</button>
-              <div class="track-main">
-                <strong>분위기와 공연 흐름 검토</strong>
-                <small>모든 신청곡이 재생되는 것은 아니에요</small>
-              </div>
-              <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            </article>
-            <article class="track-row">
-              <span class="rank">03</span>
-              <button type="button" tabindex="-1" aria-hidden="true">▶</button>
-              <div class="track-main">
-                <strong>공개 동의 기록 저장</strong>
-                <small>좋은 사연은 공연 후 아카이브로</small>
-              </div>
-              <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            </article>
-          </div>
-          <div class="guide-card">
-            <strong>운영 메모</strong>
-            <p>욕설, 광고, 타인의 개인정보가 포함된 신청은 공개하지 않습니다.</p>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section id="support" class="section support-section">
-      <div class="container section-heading split-heading dark-heading">
-        <div>
-          <p class="eyebrow">Musician Support</p>
-          <h2>무대 위 뮤지션에게<br />응원을 보내주세요.</h2>
-        </div>
-        <p>글을 길게 쓰지 않아도 괜찮습니다. 짧은 박수, 하트, 한마디가 다음 무대를 만드는 힘이 됩니다.</p>
-      </div>
-
-      <div class="container support-layout">
-        <div class="musician-side">
-          <div class="musician-grid" data-musician-cards aria-live="polite"></div>
-        </div>
-
-        <form class="form-card dark support-card" data-form="support" novalidate>
-          <div class="form-card-head">
-            <span class="card-label mint">SUPPORT FORM</span>
-            <h3>응원 메시지</h3>
-          </div>
-
-          <div class="form-row">
-            <label for="musicianId">응원할 뮤지션 <span aria-hidden="true">*</span></label>
-            <select id="musicianId" name="musicianId" required data-musician-options>
-              <option value="">뮤지션 선택</option>
-            </select>
-            <p class="field-error" data-error-for="musicianId"></p>
-          </div>
-
-          <div class="form-row">
-            <label for="supportNickname">닉네임 <span aria-hidden="true">*</span></label>
-            <input id="supportNickname" name="nickname" type="text" maxlength="20" required placeholder="예: 오늘의관객" autocomplete="nickname" />
-            <p class="field-error" data-error-for="supportNickname"></p>
-          </div>
-
-          <div class="form-row">
-            <span class="label-like">응원 이모지</span>
-            <div class="emoji-row" data-emoji-options></div>
-          </div>
-
-          <div class="form-row">
-            <label for="supportMessage">응원 메시지 <span aria-hidden="true">*</span></label>
-            <div class="preset-row" data-preset-row>
-              <button type="button" data-preset="오늘 무대 최고였어요.">오늘 무대 최고였어요</button>
-              <button type="button" data-preset="다음 공연도 보고 싶어요.">다음 공연도 보고 싶어요</button>
-              <button type="button" data-preset="로플레에서 또 만나요.">로플레에서 또 만나요</button>
+            <div>
+              <dt>사업자등록번호</dt>
+              <dd>683-81-03553</dd>
             </div>
-            <textarea id="supportMessage" name="message" rows="4" maxlength="300" required placeholder="뮤지션에게 전하고 싶은 말을 남겨주세요."></textarea>
-            <p class="counter"><span data-counter-for="supportMessage">0</span>/300</p>
-            <p class="field-error" data-error-for="supportMessage"></p>
-          </div>
-
-          <div class="form-row">
-            <label for="snsId">SNS 아이디</label>
-            <input id="snsId" name="snsId" type="text" maxlength="60" placeholder="선택 입력" />
-          </div>
-
-          <label class="checkbox-row">
-            <input name="isPublic" type="checkbox" value="yes" checked />
-            <span>응원 메시지를 로플레 기록/SNS에 익명 공개해도 괜찮아요.</span>
-          </label>
-
-          <input class="visually-hidden" name="website" tabindex="-1" autocomplete="off" />
-
-          <button class="button primary full" type="submit">응원 보내기</button>
-          <p class="form-status" role="status" aria-live="polite" data-status></p>
-        </form>
-      </div>
-    </section>
-
-    <section id="live" class="section live-section">
-      <div class="container live-board">
-        <article class="live-summary">
-          <span class="card-label mint">NOW</span>
-          <h2>오늘의 라이브</h2>
-          <h3 data-live-title>오늘의 로플레 라이브</h3>
-          <p data-live-description>오늘 이 공간에서 듣고 싶은 음악과 무대에 대한 응원을 남겨주세요.</p>
-          <dl>
-            <div><dt>일정</dt><dd data-event-date>오늘</dd></div>
-            <div><dt>시작</dt><dd data-event-time>19:30</dd></div>
-            <div><dt>신청곡</dt><dd data-request-open>접수중</dd></div>
-            <div><dt>응원 메시지</dt><dd data-support-open>접수중</dd></div>
+            <div>
+              <dt>법인등록번호</dt>
+              <dd>131351-0000805</dd>
+            </div>
+            <div>
+              <dt>개업연월일</dt>
+              <dd>2025년 04월 16일</dd>
+            </div>
+            <div>
+              <dt>사업장 소재지</dt>
+              <dd>경기도 평택시 고덕여염로 20, 1701동 1층 사회적기업2호(고덕동)</dd>
+            </div>
+            <div>
+              <dt>업태 / 종목</dt>
+              <dd>서비스 / 출판, 로컬크리에이팅 서비스</dd>
+            </div>
           </dl>
-        </article>
-        <div class="lineup-wrap">
-          <div class="section-heading left-heading">
-            <p class="eyebrow">Line-up</p>
-            <h2>오늘 만나는 뮤지션</h2>
-          </div>
-          <div class="lineup" data-lineup></div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <section id="playlist" class="section playlist-section">
-      <div class="container section-heading">
-        <p class="eyebrow">BGM Playlist Mood</p>
-        <h2>오늘의 분위기를 고르면<br />선곡 방향이 더 선명해져요.</h2>
-        <p>신청곡 폼의 분위기 선택지는 공연 중 빠른 판단을 돕는 운영 태그입니다.</p>
-      </div>
-      <div class="container playlist-grid" aria-label="분위기 선택 예시">
-        <article><span>Calm</span><strong>잔잔하게</strong><p>대화가 흐르는 저녁, 부드러운 온도</p></article>
-        <article><span>Energy</span><strong>신나게</strong><p>박수와 리듬이 자연스럽게 올라오는 순간</p></article>
-        <article><span>Comfort</span><strong>위로받고 싶어요</strong><p>오늘 하루를 천천히 내려놓는 노래</p></article>
-        <article><span>Sing Along</span><strong>같이 부르고 싶어요</strong><p>관객과 무대가 함께 기억하는 후렴</p></article>
-      </div>
-    </section>
-
-    <section id="archive" class="section archive-section">
-      <div class="container section-heading split-heading">
-        <div>
-          <p class="eyebrow">Archive</p>
-          <h2>신청곡과 응원이<br />로플레 기록이 됩니다.</h2>
-        </div>
-        <p>공개 동의된 신청곡과 응원 메시지를 모아 공연 후 콘텐츠, 뮤지션 피드백, 다음 공연 기획 자료로 활용합니다.</p>
-      </div>
-      <div class="container archive-grid" data-archive-grid></div>
-      <div class="container stats-grid" data-stats-grid>
-        <article>
-          <strong data-request-count>0</strong>
-          <span>이 브라우저에 저장된 신청곡</span>
-        </article>
-        <article>
-          <strong data-support-count>0</strong>
-          <span>이 브라우저에 저장된 응원</span>
-        </article>
-      </div>
-    </section>
-
-    <section id="admin" class="section admin-section">
-      <div class="container admin-layout">
-        <div class="section-copy">
-          <p class="eyebrow">Manager</p>
-          <h2>운영자 확인 화면</h2>
-          <p>GitHub Pages 정적 사이트용 간이 관리자입니다. 같은 브라우저에서 접수된 로컬 데이터 확인과 CSV 내보내기를 지원합니다.</p>
-          <p class="notice strong">실제 매장 운영 데이터는 Google Apps Script로 연결한 Google Sheet에서 관리하는 것을 권장합니다.</p>
-        </div>
-
-        <div class="admin-card" data-admin-card>
-          <form class="admin-login" data-admin-login>
-            <label for="adminPassword">관리자 비밀번호</label>
-            <div class="inline-control">
-              <input id="adminPassword" type="password" autocomplete="current-password" placeholder="config.js의 adminPassword" />
-              <button class="button secondary" type="submit">열기</button>
-            </div>
-            <p class="form-status" role="status" aria-live="polite" data-admin-status></p>
-          </form>
-
-          <div class="admin-panel" data-admin-panel hidden>
-            <div class="admin-actions">
-              <button class="button secondary" type="button" data-export="requests">신청곡 CSV</button>
-              <button class="button secondary" type="button" data-export="supports">응원 CSV</button>
-              <button class="button danger" type="button" data-clear-local>로컬 데이터 초기화</button>
-            </div>
-            <div class="admin-tabs" role="tablist" aria-label="관리자 데이터 탭">
-              <button class="active" type="button" data-admin-tab="requests">신청곡</button>
-              <button type="button" data-admin-tab="supports">응원</button>
-            </div>
-            <div class="admin-table-wrap">
-              <table data-admin-table>
-                <thead></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
+    <footer class="site-footer">
       <div>
-        <strong data-footer-brand>LOCAL PLAY RECORD</strong>
-        <p data-contact-text>공연/대관/협업 문의는 인스타그램 DM으로 연락해주세요.</p>
+        <img class="footer-logo" src="./assets/flat-logo.png" alt="FLAT" />
+        <p>LOCAL / PLAY / RECORD</p>
       </div>
-      <a class="button ghost" href="https://www.instagram.com/" target="_blank" rel="noreferrer" data-instagram-link>Instagram</a>
-    </div>
-  </footer>
+      <a href="#hero">상단으로 이동</a>
+    </footer>
 
-  <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
-  <script src="assets/app.js?v=20260625-realtime"></script>
-</body>
+    <div class="floating-actions" aria-label="빠른 실행">
+      <button class="floating-button" type="button" data-open-contact aria-label="문의하기">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0 0-3L17.5 5.5a2.1 2.1 0 0 0-3 0L4 16v4Z" />
+          <path d="M13.5 7.5l3 3" />
+        </svg>
+      </button>
+      <a class="floating-button outline" href="#hero" aria-label="상단으로 이동">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 19V5" />
+          <path d="M5 12l7-7 7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="drawer-backdrop" data-close-contact></div>
+    <aside class="contact-drawer" aria-hidden="true" aria-label="문의 패널" data-contact-drawer>
+      <div class="drawer-header">
+        <button class="drawer-back" type="button" data-drawer-back aria-label="처음으로">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <strong>PROJECT REQUEST</strong>
+        <button class="drawer-close" type="button" data-close-contact aria-label="닫기">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12" />
+            <path d="M18 6 6 18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="drawer-home" data-drawer-home>
+        <div class="chat-time">Today 12:00 PM</div>
+        <div class="chat-row">
+          <span class="chat-avatar">F</span>
+          <div class="chat-bubble">
+            <strong>안녕하세요, 플랫입니다.</strong>
+            <p>어떤 연결이 필요하신가요?</p>
+          </div>
+        </div>
+        <button class="drawer-card primary-card" type="button" data-start-wizard>
+          <span>CONTACT</span>
+          <strong>공연 / 대관 / 협업 문의하기</strong>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14" />
+            <path d="M13 6l6 6-6 6" />
+          </svg>
+        </button>
+        <div class="drawer-card-grid">
+          <a class="drawer-card" href="#spaces" data-close-contact>
+            <span>SPACES</span>
+            <strong>공간 보기</strong>
+          </a>
+        </div>
+      </div>
+
+      <form class="contact-wizard is-hidden" data-contact-wizard>
+        <div class="wizard-step is-active" data-step="1">
+          <p class="eyebrow">STEP 1</p>
+          <h3>어떤 문의인가요?</h3>
+          <div class="choice-grid" data-choice-group="type">
+            <button type="button" data-choice="공연">공연</button>
+            <button type="button" data-choice="대관">대관</button>
+            <button type="button" data-choice="협업">협업</button>
+            <button type="button" data-choice="취재">취재</button>
+          </div>
+          <button class="button primary next-step" type="button" data-next-step>다음</button>
+        </div>
+
+        <div class="wizard-step" data-step="2">
+          <p class="eyebrow">STEP 2</p>
+          <h3>어떤 공간과 관련 있나요?</h3>
+          <div class="choice-grid" data-choice-group="space">
+            <button type="button" data-choice="LOCAL PLAY RECORD">LOCAL PLAY RECORD</button>
+            <button type="button" data-choice="FLAT 인쇄출판창작소">FLAT 인쇄출판창작소</button>
+            <button type="button" data-choice="아직 미정">아직 미정</button>
+          </div>
+          <button class="button primary next-step" type="button" data-next-step>다음</button>
+        </div>
+
+        <div class="wizard-step" data-step="3">
+          <p class="eyebrow">STEP 3</p>
+          <h3>희망 일정이 있나요?</h3>
+          <div class="choice-grid" data-choice-group="schedule">
+            <button type="button" data-choice="이번 달">이번 달</button>
+            <button type="button" data-choice="다음 달">다음 달</button>
+            <button type="button" data-choice="아직 미정">아직 미정</button>
+          </div>
+          <label class="field">
+            <span>직접 입력</span>
+            <input name="scheduleNote" type="text" placeholder="예: 7월 둘째 주 금요일" />
+          </label>
+          <button class="button primary next-step" type="button" data-next-step>다음</button>
+        </div>
+
+        <div class="wizard-step" data-step="4">
+          <p class="eyebrow">STEP 4</p>
+          <h3>연락 정보를 남겨주세요.</h3>
+          <label class="field">
+            <span>이름</span>
+            <input name="name" type="text" placeholder="성함 또는 단체명" />
+          </label>
+          <label class="field">
+            <span>연락처</span>
+            <input name="contact" type="text" placeholder="전화번호 또는 인스타그램 ID" />
+          </label>
+          <label class="field">
+            <span>문의 내용</span>
+            <textarea name="message" rows="4" placeholder="내용을 간단히 적어주세요."></textarea>
+          </label>
+          <button class="button primary" type="button" data-build-summary>문의 내용 정리</button>
+        </div>
+
+        <div class="wizard-step" data-step="5">
+          <p class="eyebrow">READY</p>
+          <h3>문의 내용이 정리되었습니다.</h3>
+          <div class="summary-box" data-summary-box></div>
+          <a class="button primary" href="#contact">인스타그램 DM 연결 예정</a>
+        </div>
+      </form>
+    </aside>
+
+    <svg class="filter-stage" width="0" height="0" aria-hidden="true">
+      <filter id="displacementFilter1" x="-50%" y="-50%" width="200%" height="200%">
+        <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="3" seed="1" result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="1.2" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="displacementFilter2" x="-50%" y="-50%" width="200%" height="200%">
+        <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="3" seed="2" result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="1.6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="displacementFilter3" x="-50%" y="-50%" width="200%" height="200%">
+        <feTurbulence type="turbulence" baseFrequency="0.026" numOctaves="3" seed="3" result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="1.4" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="displacementFilter4" x="-50%" y="-50%" width="200%" height="200%">
+        <feTurbulence type="turbulence" baseFrequency="0.034" numOctaves="3" seed="4" result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="displacementFilter5" x="-50%" y="-50%" width="200%" height="200%">
+        <feTurbulence type="turbulence" baseFrequency="0.028" numOctaves="3" seed="5" result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="1.3" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+
+    <script src="./assets/three.min.js"></script>
+    <script src="./air3d.js"></script>
+    <script src="./script.js"></script>
+  </body>
 </html>
