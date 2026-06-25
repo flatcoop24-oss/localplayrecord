@@ -15,7 +15,8 @@ window.LPR_CONFIG = {
 
   // Google Apps Script Web App URL. 예: 'https://script.google.com/macros/s/AKfycb.../exec'
   sheetEndpoint: 'https://script.google.com/macros/s/AKfycbzRWQ8w_sarODa0AAIFuaJaBiBrKBva5q1AkiYLkVCvD1H2TK7CuM5rSQLzCTIsHpSX/exec',
-  remoteConfigTimeoutMs: 6000,
+  remoteConfigTimeoutMs: 2500,
+  realtimeRefreshMs: 2000,
 
   // 관리자 화면은 정적 페이지용 간이 기능입니다. 실제 운영 데이터 관리는 Google Sheet에서 하는 것을 권장합니다.
   adminPassword: 'lpr-admin',
