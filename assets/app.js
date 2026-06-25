@@ -23,12 +23,16 @@
     musicians: [],
     archiveSamples: [],
     submitCooldownMs: 3000,
-    remoteConfigTimeoutMs: 6000
+    remoteConfigTimeoutMs: 2500,
+    realtimeRefreshMs: 2000
   };
 
   let config = mergeDeep(defaults, window.LPR_CONFIG || {});
   const state = {
-    activeAdminTab: 'requests'
+    activeAdminTab: 'requests',
+    remoteConfigLoading: false,
+    remoteConfigSignature: '',
+    realtimeRefreshTimer: 0
   };
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -46,6 +50,7 @@
     loadSheetConfig().then((updated) => {
       if (updated) renderApp();
     });
+    startRealtimeRefresh();
   });
 
   function renderApp() {
@@ -83,6 +88,7 @@
       const cached = JSON.parse(localStorage.getItem(sheetConfigCacheKey()) || 'null');
       if (cached && cached.config) {
         config = mergeDeep(config, cached.config);
+        state.remoteConfigSignature = cached.signature || configSignature(cached.config);
         return true;
       }
     } catch (error) {
@@ -92,11 +98,12 @@
     return false;
   }
 
-  function cacheSheetConfig(sheetConfig) {
+  function cacheSheetConfig(sheetConfig, signature) {
     try {
       localStorage.setItem(sheetConfigCacheKey(), JSON.stringify({
         savedAt: Date.now(),
-        config: sheetConfig
+        config: sheetConfig,
+        signature
       }));
     } catch (error) {
       console.warn('Google Sheet 설정 캐시에 실패했습니다.', error);
@@ -105,6 +112,9 @@
 
   async function loadSheetConfig() {
     if (!config.sheetEndpoint) return false;
+    if (state.remoteConfigLoading) return false;
+
+    state.remoteConfigLoading = true;
 
     try {
       const response = await loadJsonp(config.sheetEndpoint, {
@@ -113,17 +123,51 @@
       });
 
       if (response && response.ok && response.config) {
+        const signature = configSignature(response.config);
+        if (signature === state.remoteConfigSignature) return false;
+
         config = mergeDeep(config, response.config);
-        cacheSheetConfig(response.config);
+        state.remoteConfigSignature = signature;
+        cacheSheetConfig(response.config, signature);
         return true;
       } else if (response && response.error) {
         console.warn('Google Sheet 설정을 불러오지 못했습니다:', response.error);
       }
     } catch (error) {
       console.warn('Google Sheet 설정을 불러오지 못했습니다. config.js 값을 사용합니다.', error);
+    } finally {
+      state.remoteConfigLoading = false;
     }
 
     return false;
+  }
+
+  function startRealtimeRefresh() {
+    const refreshMs = Number(config.realtimeRefreshMs || 0);
+    if (!config.sheetEndpoint || !Number.isFinite(refreshMs) || refreshMs < 1000) return;
+
+    window.clearInterval(state.realtimeRefreshTimer);
+    state.realtimeRefreshTimer = window.setInterval(() => {
+      if (document.visibilityState === 'hidden') return;
+      loadSheetConfig().then((updated) => {
+        if (updated) renderApp();
+      });
+    }, refreshMs);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') return;
+      loadSheetConfig().then((updated) => {
+        if (updated) renderApp();
+      });
+    });
+  }
+
+  function configSignature(value) {
+    try {
+      return JSON.stringify(value);
+    } catch (error) {
+      return String(Date.now());
+    }
   }
 
   function loadJsonp(endpoint, params = {}) {
