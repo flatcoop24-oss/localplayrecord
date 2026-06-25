@@ -14,6 +14,8 @@
  */
 
 const SPREADSHEET_ID = '1On8Nv8jNJpan2siqLuZMGGKSGcGGHxG7p_oiIsEJjYI';
+const CONFIG_CACHE_KEY = 'lpr-site-config-v1';
+const CONFIG_CACHE_SECONDS = 2;
 
 const SHEETS = {
   settings: {
@@ -51,7 +53,7 @@ function doGet(e) {
       return respond_({ ok: true, message: 'Sheets are ready.' }, e);
     }
 
-    return respond_({ ok: true, config: getSiteConfig_() }, e);
+    return respond_(getCachedSiteConfig_(), e);
   } catch (error) {
     console.error(error);
     return respond_({ ok: false, error: String(error.message || error) }, e);
@@ -133,6 +135,8 @@ function getSiteConfig_() {
     contactText: stringSetting_(settings, 'contactText', '공연/대관/협업 문의는 인스타그램 DM으로 연락해주세요.'),
     adminPassword: stringSetting_(settings, 'adminPassword', 'lpr-admin'),
     submitCooldownMs: numberSetting_(settings, 'submitCooldownMs', 3000),
+    remoteConfigTimeoutMs: numberSetting_(settings, 'remoteConfigTimeoutMs', 2500),
+    realtimeRefreshMs: numberSetting_(settings, 'realtimeRefreshMs', 2000),
     currentEvent: {
       id: eventId,
       title: eventTitle,
@@ -147,6 +151,24 @@ function getSiteConfig_() {
     musicians: getMusicians_(),
     archiveSamples: getArchiveSamples_()
   };
+}
+
+function getCachedSiteConfig_() {
+  const cache = CacheService.getScriptCache();
+  const cached = cache.get(CONFIG_CACHE_KEY);
+
+  if (cached) {
+    return JSON.parse(cached);
+  }
+
+  const response = {
+    ok: true,
+    config: getSiteConfig_(),
+    refreshedAt: new Date().toISOString()
+  };
+
+  cache.put(CONFIG_CACHE_KEY, JSON.stringify(response), CONFIG_CACHE_SECONDS);
+  return response;
 }
 
 function getSettings_() {
