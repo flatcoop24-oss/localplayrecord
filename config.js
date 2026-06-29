@@ -14,7 +14,7 @@ window.LPR_CONFIG = {
   contactText: '공연/대관/협업 문의는 인스타그램 DM으로 연락해주세요.',
 
   // Google Apps Script Web App URL. 예: 'https://script.google.com/macros/s/AKfycb.../exec'
-  sheetEndpoint: 'https://script.google.com/macros/s/AKfycbxDgHPGAZZLdr5TqKSOj9UOuArdXUjH_Cc8a08QgAq375BxsyKecPp_3yq8YyWIUyLB/exec',
+  sheetEndpoint: 'https://script.google.com/macros/s/AKfycbxZmoLJkQgQIyHhxpWkCEveaBtriz0oWosmbO3DBqiFU0TQ-Vf-xWDsrpMnKpb1AD1-/exec',
   remoteConfigTimeoutMs: 2500,
   realtimeRefreshMs: 2000,
 
