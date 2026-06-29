@@ -10,7 +10,7 @@ window.LPR_CONFIG = {
   brandName: 'LOCAL PLAY RECORD',
   shortName: '로플레',
   venueName: '로컬플레이레코드',
-  instagramUrl: 'https://www.instagram.com/',
+  instagramUrl: 'https://www.instagram.com/local.play.record?igsh=YmVwdTAzcmdqYzM2&utm_source=qr',
   contactText: '공연/대관/협업 문의는 인스타그램 DM으로 연락해주세요.',
 
   // Google Apps Script Web App URL. 예: 'https://script.google.com/macros/s/AKfycb.../exec'
