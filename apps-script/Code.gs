@@ -16,6 +16,8 @@
 const SPREADSHEET_ID = '1On8Nv8jNJpan2siqLuZMGGKSGcGGHxG7p_oiIsEJjYI';
 const CONFIG_CACHE_KEY = 'lpr-site-config-v1';
 const CONFIG_CACHE_SECONDS = 2;
+const RECORDS_CACHE_KEY = 'lpr-records-v1';
+const RECORDS_CACHE_SECONDS = 2;
 
 const SHEETS = {
   settings: {
@@ -51,6 +53,10 @@ function doGet(e) {
     if (action === 'setup') {
       ensureWorkbook_();
       return respond_({ ok: true, message: 'Sheets are ready.' }, e);
+    }
+
+    if (action === 'records') {
+      return respond_(getCachedRecords_(e), e);
     }
 
     return respond_(getCachedSiteConfig_(), e);
@@ -111,6 +117,7 @@ function doPost(e) {
       ]);
     }
 
+    clearRecordsCache_();
     return respond_({ ok: true }, e);
   } catch (error) {
     console.error(error);
@@ -169,6 +176,99 @@ function getCachedSiteConfig_() {
 
   cache.put(CONFIG_CACHE_KEY, JSON.stringify(response), CONFIG_CACHE_SECONDS);
   return response;
+}
+
+function getCachedRecords_(e) {
+  const type = String((e && e.parameter && e.parameter.type) || 'all').trim();
+  const requestedLimit = Number((e && e.parameter && e.parameter.limit) || 200);
+  const limit = Math.max(1, Math.min(Number.isFinite(requestedLimit) ? requestedLimit : 200, 500));
+  const cacheKey = [RECORDS_CACHE_KEY, type, limit].join(':');
+  const cache = CacheService.getScriptCache();
+  const cached = cache.get(cacheKey);
+
+  if (cached) {
+    return JSON.parse(cached);
+  }
+
+  const response = {
+    ok: true,
+    records: getRecords_(type, limit),
+    refreshedAt: new Date().toISOString()
+  };
+
+  cache.put(cacheKey, JSON.stringify(response), RECORDS_CACHE_SECONDS);
+  return response;
+}
+
+function getRecords_(type, limit) {
+  if (type === 'requests') {
+    return { requests: getRecentRecords_('requests', limit), supports: [] };
+  }
+
+  if (type === 'supports') {
+    return { requests: [], supports: getRecentRecords_('supports', limit) };
+  }
+
+  return {
+    requests: getRecentRecords_('requests', limit),
+    supports: getRecentRecords_('supports', limit)
+  };
+}
+
+function getRecentRecords_(type, limit) {
+  return readObjects_(type)
+    .map(function(item) { return normalizeRecord_(type, item); })
+    .filter(function(item) { return item.createdAt; })
+    .sort(sortByCreatedAtDesc_)
+    .slice(0, limit);
+}
+
+function normalizeRecord_(type, item) {
+  if (type === 'requests') {
+    return {
+      createdAt: clean_(item.createdAt, 80),
+      eventId: clean_(item.eventId, 80),
+      eventTitle: clean_(item.eventTitle, 160),
+      nickname: clean_(item.nickname, 40),
+      songTitle: clean_(item.songTitle, 120),
+      artistName: clean_(item.artistName, 120),
+      mood: clean_(item.mood, 80),
+      reason: clean_(item.reason, 500),
+      isPublic: bool_(item.isPublic, false),
+      status: clean_(item.status, 40),
+      source: clean_(item.source, 60),
+      userAgent: clean_(item.userAgent, 300)
+    };
+  }
+
+  return {
+    createdAt: clean_(item.createdAt, 80),
+    eventId: clean_(item.eventId, 80),
+    eventTitle: clean_(item.eventTitle, 160),
+    nickname: clean_(item.nickname, 40),
+    musicianId: clean_(item.musicianId, 80),
+    emoji: clean_(item.emoji, 20),
+    message: clean_(item.message, 500),
+    snsId: clean_(item.snsId, 100),
+    isPublic: bool_(item.isPublic, false),
+    source: clean_(item.source, 60),
+    userAgent: clean_(item.userAgent, 300)
+  };
+}
+
+function sortByCreatedAtDesc_(a, b) {
+  const nextTime = new Date(b.createdAt).getTime() || 0;
+  const currentTime = new Date(a.createdAt).getTime() || 0;
+  return nextTime - currentTime;
+}
+
+function clearRecordsCache_() {
+  const cache = CacheService.getScriptCache();
+  [100, 200, 500].forEach(function(limit) {
+    cache.remove([RECORDS_CACHE_KEY, 'all', limit].join(':'));
+    cache.remove([RECORDS_CACHE_KEY, 'requests', limit].join(':'));
+    cache.remove([RECORDS_CACHE_KEY, 'supports', limit].join(':'));
+  });
 }
 
 function getSettings_() {
